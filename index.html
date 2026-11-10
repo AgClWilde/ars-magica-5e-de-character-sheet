@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>魔法秘艺 (Ars Magica 5E) · 中文可填写角色卡</title>
+  <title>魔法秘艺 (Ars Magica 5E Definitive Edition)  中文角色卡</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="mode-cn-only">
   <!-- ==================== 顶部固定工具栏 ==================== -->
   <header class="app-toolbar no-print">
     <div class="toolbar-brand">
-      <h1>Ars Magica · 魔法秘艺</h1>
+      <h1>Ars Magica 魔法秘艺</h1>
       <span class="badge">五版 Definitive Edition 中文角色卡</span>
       <span id="saveStatus" class="save-status">已自动保存</span>
     </div>
@@ -25,9 +25,9 @@
     <div class="toolbar-actions">
       <select id="slotSelect" class="btn" title="切换本地角色存档槽位"></select>
       <button type="button" id="btnNewSlot" class="btn" title="新建空白角色存档">+ 新建角色</button>
-      <button type="button" id="btnToggleAutoCalc" class="btn active" title="开启或关闭公式自动计算">⚡ 自动计算：开</button>
+      <button type="button" id="btnToggleAutoCalc" class="btn active" title="开启或关闭公式自动计算">自动计算：开</button>
       <button type="button" id="btnToggleLang" class="btn" title="切换纯中文标签或中英双语标签">纯中文标签</button>
-      <button type="button" id="btnOpenGlossary" class="btn" title="打开《术语对照总表》内置检索抽屉">📖 术语对照表</button>
+      <button type="button" id="btnOpenGlossary" class="btn" title="打开《术语对照总表》内置检索抽屉">术语对照表</button>
       <button type="button" id="btnExportJson" class="btn" title="导出当前角色卡数据为 JSON 文件">⬇ 导出 JSON</button>
       <label class="btn" title="从 JSON 文件导入角色卡数据">
         ⬆ 导入 JSON
@@ -52,7 +52,7 @@
         <div class="p1-header-fields">
           <div class="field-row">
             <label class="field-label-lg">角色<span class="en-sub">Character</span>:</label>
-            <input type="text" data-field="character_name" placeholder="输入角色名（如：大流士 Darius）" />
+            <input type="text" data-field="character_name" placeholder="输入角色名" />
           </div>
           <div class="field-row">
             <label class="field-label">玩家<span class="en-sub">Player</span>:</label>
@@ -561,7 +561,7 @@
             </div>
             <div class="field-row">
               <label class="field-label" style="visibility:hidden;">法师徽记:</label>
-              <input type="text" data-field="wizards_sigil_2" placeholder="（徽记补充描述）" />
+              <input type="text" data-field="wizards_sigil_2" placeholder="" />
             </div>
           </div>
 
