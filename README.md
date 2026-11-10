@@ -43,6 +43,11 @@ python3 -m http.server 8080
    - 选择 **Deploy from a branch** → 选择 `gh-pages`（或 `main`）分支 `/ (root)` 目录保存即可；
    - 或直接选择 **GitHub Actions**。
 
+## TODO
+
+- [ ] 更新glossary
+- [ ] 自动补全修正
+
 ## 版权声明
 
 Permission granted to photocopy for personal use. © 2025 Trident, Inc. d/b/a Atlas Games.
