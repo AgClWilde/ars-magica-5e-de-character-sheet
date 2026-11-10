@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Ars Magica 5E Definitive Edition - 中文可填写角色卡样式表
+   Ars Magica 5E Definitive Edition - 中文可填写角色卡样式表 (对齐修正版)
    ========================================================================== */
 
 :root {
@@ -61,7 +61,7 @@ body {
 .toolbar-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .toolbar-brand h1 {
@@ -142,7 +142,6 @@ body {
 .save-status {
   font-size: 11px;
   color: #bfb099;
-  margin-right: 4px;
 }
 
 /* 双语显示控制 */
@@ -151,11 +150,12 @@ body.mode-cn-only .en-sub {
 }
 
 .en-sub {
-  font-size: 0.82em;
+  font-size: 0.78em;
   color: var(--ink-muted);
   font-weight: normal;
   margin-left: 3px;
   font-family: "Georgia", serif;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -179,11 +179,11 @@ body.mode-cn-only .en-sub {
   border: 3px solid var(--border-gold-dark);
   border-radius: 4px;
   box-shadow: var(--shadow-card);
-  padding: 26px 32px 38px;
+  padding: 26px 30px 24px;
   overflow: hidden;
 }
 
-/* 复古金边内框与四角菱形装饰 */
+/* 复古金边内框 */
 .sheet-page::before {
   content: "";
   position: absolute;
@@ -201,7 +201,7 @@ body.mode-cn-only .en-sub {
   color: var(--ink-muted);
   font-family: var(--font-title);
   z-index: 2;
-  background: rgba(243, 234, 216, 0.85);
+  background: rgba(243, 234, 216, 0.9);
   padding: 1px 8px;
   border: 1px solid var(--border-gold);
   border-radius: 2px;
@@ -238,7 +238,7 @@ body.mode-cn-only .en-sub {
 /* 标题样式 */
 .section-title {
   font-family: var(--font-title);
-  font-size: 17px;
+  font-size: 16.5px;
   font-weight: 700;
   color: var(--ink-brown);
   letter-spacing: 0.5px;
@@ -248,18 +248,20 @@ body.mode-cn-only .en-sub {
   gap: 6px;
   border-bottom: 1px solid rgba(181, 141, 61, 0.45);
   padding-bottom: 2px;
+  line-height: 1.25;
 }
 
-.section-title-sm {
-  font-family: var(--font-title);
-  font-size: 14.5px;
-  font-weight: 700;
-  color: var(--ink-brown);
-  margin-bottom: 4px;
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(181, 141, 61, 0.45);
+  padding-bottom: 3px;
+  margin-bottom: 6px;
 }
 
 /* ==========================================================================
-   表单输入控件样式 (下划线手写风)
+   表单输入控件样式 (下划线手写风，严格统一行高与基线)
    ========================================================================== */
 input[type="text"],
 input[type="number"],
@@ -271,7 +273,9 @@ textarea {
   background: var(--input-bg);
   border: none;
   border-bottom: 1px solid #574634;
-  padding: 2px 5px;
+  padding: 1px 5px;
+  height: 22px;
+  line-height: 20px;
   width: 100%;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
@@ -300,7 +304,7 @@ textarea:focus {
 }
 
 input[readonly].calc-output {
-  background: rgba(181, 141, 61, 0.12);
+  background: rgba(181, 141, 61, 0.14);
   font-weight: 700;
   color: #5a1818;
   border-bottom: 1px dashed var(--border-gold-dark);
@@ -309,13 +313,16 @@ input[readonly].calc-output {
 /* 经验与伤势小方框 */
 .exp-box {
   width: 24px !important;
-  height: 19px;
+  height: 19px !important;
+  line-height: 17px !important;
   border: 1px solid #4a3c2c !important;
   background: #fffdf9 !important;
   text-align: center;
   font-size: 11px !important;
   padding: 0 !important;
   border-radius: 1px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .check-sq {
@@ -328,7 +335,7 @@ input[readonly].calc-output {
   cursor: pointer;
   display: inline-grid;
   place-content: center;
-  margin: 0 1px;
+  margin: 0 2px 0 0;
   vertical-align: middle;
 }
 
@@ -345,12 +352,18 @@ input[readonly].calc-output {
   line-height: 1;
 }
 
-/* 字段行布局 */
+/* 字段行布局：垂直居中对齐，确保标签与输入下划线整齐划一 */
 .field-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
   margin-bottom: 4px;
+  min-height: 23px;
+}
+
+.field-row > input {
+  flex: 1;
+  min-width: 0;
 }
 
 .field-label {
@@ -358,14 +371,18 @@ input[readonly].calc-output {
   font-weight: 600;
   color: var(--ink-brown);
   font-size: 12.5px;
+  line-height: 22px;
+  flex-shrink: 0;
 }
 
 .field-label-lg {
   font-family: var(--font-title);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--ink-brown);
   white-space: nowrap;
+  line-height: 22px;
+  flex-shrink: 0;
 }
 
 /* 括号包裹输入框 */
@@ -387,24 +404,50 @@ input[readonly].calc-output {
   margin-left: 2px;
 }
 
+.lined-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stretch-list {
+  flex: 1;
+  justify-content: space-between;
+}
+
 /* ==========================================================================
-   Page 1 专属布局
+   Page 1 专属布局 (三栏与双栏底部严格等高对齐)
    ========================================================================== */
 .p1-header-grid {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
   gap: 18px;
-  align-items: center;
+  align-items: stretch;
   margin-bottom: 10px;
   position: relative;
   z-index: 2;
 }
 
+.p1-header-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.p1-header-fields .field-label,
+.p1-header-fields .field-label-lg {
+  min-width: 56px;
+}
+
 .ars-logo-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: 2px double var(--border-gold-dark);
-  background: linear-gradient(135deg, rgba(181, 141, 61, 0.14) 0%, rgba(255, 250, 235, 0.4) 50%, rgba(181, 141, 61, 0.18) 100%);
+  background: linear-gradient(135deg, rgba(181, 141, 61, 0.14) 0%, rgba(255, 250, 235, 0.45) 50%, rgba(181, 141, 61, 0.18) 100%);
   border-radius: 4px;
 }
 
@@ -428,14 +471,15 @@ input[readonly].calc-output {
 }
 
 .ars-logo-sub {
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--ink-muted);
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  margin-top: 2px;
 }
 
 .p1-subbar {
   display: grid;
-  grid-template-columns: 1.8fr 1fr 0.9fr 1.2fr;
+  grid-template-columns: 1.7fr 1.05fr 0.85fr 1.15fr;
   gap: 14px;
   margin-bottom: 12px;
   position: relative;
@@ -446,6 +490,20 @@ input[readonly].calc-output {
   display: grid;
   grid-template-columns: 1fr 1fr 1.75fr;
   gap: 16px;
+  align-items: stretch;
+}
+
+.bio-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.bio-details-col {
+  justify-content: space-between;
+}
+
+.bio-details-col > .field-row .field-label {
+  min-width: 64px;
 }
 
 .bio-two-col {
@@ -458,6 +516,19 @@ input[readonly].calc-output {
   display: grid;
   grid-template-columns: 1fr 1.15fr;
   gap: 20px;
+  align-items: stretch;
+}
+
+.p1-left-col,
+.p1-right-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.vf-block {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .char-table,
@@ -469,22 +540,23 @@ input[readonly].calc-output {
 .char-table th,
 .ability-table th {
   font-size: 11px;
-  text-transform: uppercase;
   color: var(--ink-muted);
   font-weight: 700;
   padding-bottom: 4px;
   text-align: center;
+  border-bottom: 1px solid rgba(181, 141, 61, 0.3);
 }
 
 .char-table td {
   padding: 2.5px 3px;
   vertical-align: middle;
+  height: 25px;
 }
 
 .char-name {
   font-weight: 700;
   white-space: nowrap;
-  width: 34%;
+  width: 30%;
 }
 
 .char-abbr {
@@ -498,47 +570,80 @@ input[readonly].calc-output {
 .ability-table td {
   padding: 1.5px 2px;
   vertical-align: middle;
-}
-
-.lined-list {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  height: 24px;
 }
 
 /* ==========================================================================
-   Page 2 专属布局
+   Page 2 专属布局 (战斗、疲劳/伤势复选框、武器公式表列对齐)
    ========================================================================== */
 .p2-top-grid {
   display: grid;
   grid-template-columns: 0.95fr 1.25fr;
   gap: 20px;
+  align-items: stretch;
 }
 
 .p2-combat-grid {
   display: grid;
-  grid-template-columns: 1fr 130px;
-  gap: 18px;
-  align-items: center;
+  grid-template-columns: 1fr 136px;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.combat-lines-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.combat-line-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.combat-label {
+  min-width: 68px;
+}
+
+.combat-indent {
+  padding-left: 74px;
 }
 
 .soak-box {
   text-align: center;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 8px;
+  border-left: 1px dashed rgba(181, 141, 61, 0.5);
+  padding-left: 14px;
+}
+
+.soak-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
 .soak-box .big-score {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
-  height: 30px;
+  height: 26px;
 }
 
 .p2-fatigue-wounds-grid {
   display: grid;
-  grid-template-columns: 0.95fr 1.35fr;
+  grid-template-columns: 0.92fr 1.38fr;
   gap: 20px;
+  align-items: stretch;
+}
+
+.fw-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .fatigue-table,
@@ -549,12 +654,7 @@ input[readonly].calc-output {
   border-collapse: collapse;
 }
 
-.fatigue-table td,
-.wounds-table td {
-  padding: 3px 4px;
-  vertical-align: middle;
-}
-
+.fatigue-table th,
 .wounds-table th,
 .weapons-table th,
 .vis-table th {
@@ -563,39 +663,111 @@ input[readonly].calc-output {
   font-weight: 700;
   padding-bottom: 4px;
   text-align: center;
+  border-bottom: 1px solid rgba(181, 141, 61, 0.35);
+}
+
+.fatigue-table td {
+  padding: 2.5px 4px;
+  vertical-align: middle;
+  height: 26px;
+}
+
+.wounds-table td {
+  padding: 3px 4px;
+  vertical-align: middle;
+  height: 31px;
+}
+
+/* 伤势复选框严格左对齐成列 */
+.wound-checks-cell {
+  text-align: left !important;
+  padding-left: 8px !important;
+  white-space: nowrap;
+}
+
+/* 武器公式列：表头文字与下方输入框 1:1 严格对齐 */
+.weapons-table th {
+  padding: 2px 2px 5px;
+  vertical-align: bottom;
 }
 
 .weapons-table td {
   padding: 3px 2px;
   vertical-align: middle;
-  font-size: 12px;
+  height: 27px;
 }
 
 .formula-group {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 2px;
 }
 
 .formula-group input {
-  width: 30px;
+  width: 31px !important;
+  height: 22px;
   padding: 1px 2px;
+  font-size: 12px;
+}
+
+.formula-group .op {
+  display: inline-block;
+  width: 10px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+}
+
+.formula-header span {
+  display: inline-block;
+  width: 31px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-brown);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.formula-header span.op {
+  width: 10px;
+  color: var(--ink-muted);
+}
+
+.formula-header span.res {
+  color: var(--accent-crimson);
 }
 
 .equipment-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px 18px;
+  gap: 5px 18px;
 }
 
 /* ==========================================================================
-   Page 3 专属布局
+   Page 3 专属布局 (学派四行对齐、施法公式符号居中、魔宠三栏等高)
    ========================================================================== */
 .p3-hermetic-top {
   display: grid;
-  grid-template-columns: 1fr 1.15fr;
+  grid-template-columns: 1fr 1.12fr;
   gap: 20px;
+  align-items: stretch;
+}
+
+.hermetic-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hermetic-col:first-child .field-label {
+  min-width: 64px;
+}
+
+.hermetic-col:last-child .field-label {
+  min-width: 74px;
 }
 
 .arts-three-col {
@@ -613,17 +785,36 @@ input[readonly].calc-output {
   font-size: 11px;
   color: var(--ink-muted);
   padding-bottom: 4px;
+  text-align: center;
+  border-bottom: 1px solid rgba(181, 141, 61, 0.35);
 }
 
 .art-table td {
   padding: 2.5px 3px;
   vertical-align: middle;
+  height: 26px;
 }
 
 .p3-casting-lab-grid {
   display: grid;
-  grid-template-columns: 1.08fr 1fr;
+  grid-template-columns: 1.06fr 1fr;
   gap: 22px;
+  align-items: stretch;
+}
+
+.casting-left-col,
+.casting-right-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.calc-blocks-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: 8px;
 }
 
 .casting-formulas-note {
@@ -631,12 +822,12 @@ input[readonly].calc-output {
   background: rgba(181, 141, 61, 0.1);
   border-left: 3px solid var(--border-gold);
   padding: 6px 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   line-height: 1.45;
 }
 
 .calc-block {
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 .calc-block-header {
@@ -646,6 +837,7 @@ input[readonly].calc-output {
   font-weight: 700;
   font-size: 13px;
   color: var(--ink-brown);
+  margin-bottom: 2px;
 }
 
 .calc-subnote {
@@ -654,11 +846,11 @@ input[readonly].calc-output {
   font-weight: normal;
 }
 
+/* 公式运算行：运算符与输入框高度严格居中对齐 */
 .calc-equation {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 2px;
+  align-items: flex-start;
+  gap: 6px;
 }
 
 .calc-equation .eq-col {
@@ -666,41 +858,93 @@ input[readonly].calc-output {
   flex-direction: column;
   align-items: center;
   flex: 1;
+  min-width: 0;
 }
 
 .calc-equation .eq-col span {
   font-size: 10.5px;
   color: var(--ink-muted);
-  margin-top: 1px;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.calc-equation .eq-op {
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-brown);
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.calc-equation .eq-op-wide {
+  padding: 0 6px;
+}
+
+.vis-table td {
+  padding: 2px 3px;
+  vertical-align: middle;
+  height: 24px;
 }
 
 .p3-familiar-grid {
   display: grid;
   grid-template-columns: 0.9fr 0.9fr 1.6fr;
   gap: 16px;
+  align-items: stretch;
+}
+
+.fam-stats-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.fam-stats-col .field-label {
+  min-width: 38px;
+}
+
+.fam-bond-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .cords-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 /* ==========================================================================
-   Page 4 专属布局 (法术列表)
+   Page 4 专属布局 (12栏法术卡片网格对齐)
    ========================================================================== */
 .spells-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px 20px;
+  gap: 12px 18px;
 }
 
 .spell-card {
   border: 1px solid rgba(181, 141, 61, 0.55);
-  background: rgba(255, 253, 248, 0.6);
-  padding: 8px 10px;
+  background: rgba(255, 253, 248, 0.65);
+  padding: 7px 10px;
   border-radius: 2px;
+}
+
+.spell-card .field-row {
+  margin-bottom: 3px;
+  min-height: 21px;
+}
+
+.spell-card input[type="text"],
+.spell-card input[type="number"] {
+  height: 20px;
+  line-height: 18px;
+  font-size: 12.5px;
 }
 
 .spell-row-2col {
@@ -711,7 +955,7 @@ input[readonly].calc-output {
 
 .spell-row-3col {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1.15fr 1fr;
   gap: 6px;
 }
 
@@ -721,7 +965,7 @@ input[readonly].calc-output {
   font-size: 10.5px;
   color: var(--ink-muted);
   font-style: italic;
-  margin-top: 6px;
+  margin-top: 8px;
   position: relative;
   z-index: 2;
 }
@@ -743,7 +987,7 @@ input[readonly].calc-output {
 }
 
 .drawer-panel {
-  width: min(680px, 95vw);
+  width: min(720px, 95vw);
   background: var(--parchment-light);
   color: var(--ink-black);
   height: 100%;
@@ -782,6 +1026,7 @@ input[readonly].calc-output {
   background: #fff;
   border: 1px solid var(--border-gold);
   padding: 6px 10px;
+  height: 32px;
   border-radius: 4px;
 }
 
@@ -789,7 +1034,8 @@ input[readonly].calc-output {
   width: auto;
   background: #fff;
   border: 1px solid var(--border-gold);
-  padding: 6px 10px;
+  padding: 4px 10px;
+  height: 32px;
   border-radius: 4px;
 }
 
@@ -862,7 +1108,7 @@ input[readonly].calc-output {
   .sheet-page {
     box-shadow: none !important;
     margin: 0 !important;
-    padding: 14px 18px 18px !important;
+    padding: 14px 18px 16px !important;
     page-break-after: always;
     break-after: page;
     border-width: 2px;
@@ -894,5 +1140,16 @@ input[readonly].calc-output {
   .spells-grid,
   .equipment-grid {
     grid-template-columns: 1fr;
+  }
+  .combat-indent {
+    padding-left: 0;
+  }
+  .soak-box {
+    border-left: none;
+    border-top: 1px dashed rgba(181, 141, 61, 0.5);
+    padding-left: 0;
+    padding-top: 8px;
+    flex-direction: row;
+    justify-content: space-around;
   }
 }

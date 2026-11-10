@@ -6,19 +6,19 @@
   <title>魔法秘艺 (Ars Magica 5E) · 中文可填写角色卡</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
-<body>
+<body class="mode-cn-only">
   <!-- ==================== 顶部固定工具栏 ==================== -->
   <header class="app-toolbar no-print">
     <div class="toolbar-brand">
       <h1>Ars Magica · 魔法秘艺</h1>
-      <span class="badge">五版中文角色卡 (4页完整版)</span>
+      <span class="badge">五版 Definitive Edition 中文角色卡</span>
       <span id="saveStatus" class="save-status">已自动保存</span>
     </div>
 
     <nav class="toolbar-nav">
       <a href="#page-1" class="btn">第1页：角色与能力</a>
       <a href="#page-2" class="btn">第2页：战斗与装备</a>
-      <a href="#page-3" class="btn">第3页：秘艺·工坊·魔宠</a>
+      <a href="#page-3" class="btn">第3页：秘艺、工坊与魔宠</a>
       <a href="#page-4" class="btn">第4页：法术</a>
     </nav>
 
@@ -26,7 +26,7 @@
       <select id="slotSelect" class="btn" title="切换本地角色存档槽位"></select>
       <button type="button" id="btnNewSlot" class="btn" title="新建空白角色存档">+ 新建角色</button>
       <button type="button" id="btnToggleAutoCalc" class="btn active" title="开启或关闭公式自动计算">⚡ 自动计算：开</button>
-      <button type="button" id="btnToggleLang" class="btn active" title="切换中英双语标签或纯中文标签">文/A 双语标签</button>
+      <button type="button" id="btnToggleLang" class="btn" title="切换纯中文标签或中英双语标签">纯中文标签</button>
       <button type="button" id="btnOpenGlossary" class="btn" title="打开《术语对照总表》内置检索抽屉">📖 术语对照表</button>
       <button type="button" id="btnExportJson" class="btn" title="导出当前角色卡数据为 JSON 文件">⬇ 导出 JSON</button>
       <label class="btn" title="从 JSON 文件导入角色卡数据">
@@ -45,11 +45,11 @@
          PAGE 1: 基础信息、衰老与扭曲、属性、优势与劣势、能力
          ========================================================== -->
     <section id="page-1" class="sheet-page">
-      <span class="page-badge">Page 1 / 4</span>
+      <span class="page-badge">1 / 4 页</span>
 
       <!-- 顶部标题与传奇信息 -->
       <div class="p1-header-grid">
-        <div>
+        <div class="p1-header-fields">
           <div class="field-row">
             <label class="field-label-lg">角色<span class="en-sub">Character</span>:</label>
             <input type="text" data-field="character_name" placeholder="输入角色名（如：大流士 Darius）" />
@@ -58,7 +58,7 @@
             <label class="field-label">玩家<span class="en-sub">Player</span>:</label>
             <input type="text" data-field="player_name" />
           </div>
-          <div class="field-row" style="margin-top:8px;">
+          <div class="field-row" style="margin-top:4px;">
             <label class="field-label-lg">传奇<span class="en-sub">Saga</span>:</label>
             <input type="text" data-field="saga_name" />
           </div>
@@ -77,7 +77,7 @@
         <div class="ars-logo-banner">
           <div class="ars-logo-en">Ars Magica</div>
           <div class="ars-logo-cn">魔法秘艺</div>
-          <div class="ars-logo-sub">THE ART OF MAGIC · 角色记录表</div>
+          <div class="ars-logo-sub">角色卡</div>
         </div>
       </div>
 
@@ -110,27 +110,27 @@
 
         <div class="p1-bio-grid">
           <!-- 衰朽 -->
-          <div>
+          <div class="bio-col">
             <div class="field-row">
               <label class="field-label-lg">衰朽<span class="en-sub">Decrepitude</span>:</label>
               <input type="text" data-field="decrepitude" placeholder="0 (0)" />
             </div>
-            <div class="field-label" style="margin-bottom:4px;">衰老影响<span class="en-sub">Effects of Aging</span>:</div>
-            <div id="agingEffectsList" class="lined-list"></div>
+            <div class="field-label" style="margin:2px 0 4px;">衰老影响<span class="en-sub">Effects of Aging</span>:</div>
+            <div id="agingEffectsList" class="lined-list stretch-list"></div>
           </div>
 
           <!-- 扭曲 -->
-          <div>
+          <div class="bio-col">
             <div class="field-row">
               <label class="field-label-lg">扭曲<span class="en-sub">Warping</span>:</label>
               <input type="text" data-field="warping" placeholder="0 (0)" />
             </div>
-            <div class="field-label" style="margin-bottom:4px;">扭曲影响<span class="en-sub">Effects of Warping</span>:</div>
-            <div id="warpingEffectsList" class="lined-list"></div>
+            <div class="field-label" style="margin:2px 0 4px;">扭曲影响<span class="en-sub">Effects of Warping</span>:</div>
+            <div id="warpingEffectsList" class="lined-list stretch-list"></div>
           </div>
 
           <!-- 个人出身资料 -->
-          <div>
+          <div class="bio-col bio-details-col">
             <div class="field-row">
               <label class="field-label">本名<span class="en-sub">Birth Name</span>:</label>
               <input type="text" data-field="birth_name" />
@@ -152,7 +152,7 @@
               <input type="text" data-field="religion" />
             </div>
             <div class="field-row">
-              <label class="field-label">头衔/行业<span class="en-sub">Title/Profession</span>:</label>
+              <label class="field-label">头衔/职业<span class="en-sub">Title/Profession</span>:</label>
               <input type="text" data-field="title_profession" />
             </div>
             <div class="bio-two-col">
@@ -190,7 +190,7 @@
       </div>
 
       <!-- 主面板：属性 + 优势 + 劣势 | 能力 -->
-      <div class="panel-box">
+      <div class="panel-box" style="margin-bottom:0;">
         <span class="corner-diamond tl"></span>
         <span class="corner-diamond tr"></span>
         <span class="corner-diamond bl"></span>
@@ -198,45 +198,51 @@
 
         <div class="p1-main-grid">
           <!-- 左栏：八大属性、优势、劣势 -->
-          <div>
-            <div class="section-title">
-              属性<span class="en-sub">Characteristics</span>
+          <div class="p1-left-col">
+            <div>
+              <div class="section-title">
+                属性<span class="en-sub">Characteristics</span>
+              </div>
+              <table class="char-table">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;">属性</th>
+                    <th>缩写</th>
+                    <th>描述<span class="en-sub">Description</span></th>
+                    <th style="width:58px;">数值<span class="en-sub">Score</span></th>
+                  </tr>
+                </thead>
+                <tbody id="characteristicsBody"></tbody>
+              </table>
             </div>
-            <table class="char-table">
-              <thead>
-                <tr>
-                  <th style="text-align:left;">属性</th>
-                  <th>缩写</th>
-                  <th>描述<span class="en-sub">Description</span></th>
-                  <th style="width:58px;">数值<span class="en-sub">Score</span></th>
-                </tr>
-              </thead>
-              <tbody id="characteristicsBody"></tbody>
-            </table>
 
-            <div class="section-title" style="margin-top:14px;">
-              优势<span class="en-sub">Virtues</span>:
+            <div class="vf-block">
+              <div class="section-title" style="margin-top:10px;">
+                优势<span class="en-sub">Virtues</span>:
+              </div>
+              <div id="virtuesList" class="lined-list stretch-list"></div>
             </div>
-            <div id="virtuesList" class="lined-list"></div>
 
-            <div class="section-title" style="margin-top:14px;">
-              劣势<span class="en-sub">Flaws</span>:
+            <div class="vf-block">
+              <div class="section-title" style="margin-top:10px;">
+                劣势<span class="en-sub">Flaws</span>:
+              </div>
+              <div id="flawsList" class="lined-list stretch-list"></div>
             </div>
-            <div id="flawsList" class="lined-list"></div>
           </div>
 
           <!-- 右栏：30行能力表 -->
-          <div>
+          <div class="p1-right-col">
             <div class="section-title">
               能力<span class="en-sub">Abilities</span>
             </div>
             <table class="ability-table">
               <thead>
                 <tr>
-                  <th style="width:28px;">经验<span class="en-sub">Exp</span></th>
-                  <th>能力<span class="en-sub">Ability</span></th>
+                  <th style="width:32px;">经验<span class="en-sub">Exp</span></th>
+                  <th style="text-align:left; padding-left:4px;">能力<span class="en-sub">Ability</span></th>
                   <th>专精<span class="en-sub">Speciality</span></th>
-                  <th style="width:48px;">数值<span class="en-sub">Score</span></th>
+                  <th style="width:52px;">数值<span class="en-sub">Score</span></th>
                 </tr>
               </thead>
               <tbody id="abilitiesBody"></tbody>
@@ -254,7 +260,7 @@
          PAGE 2: 人格特质、声望、战斗、疲劳等级、伤势、武器、装备
          ========================================================== -->
     <section id="page-2" class="sheet-page">
-      <span class="page-badge">Page 2 / 4</span>
+      <span class="page-badge">2 / 4 页</span>
 
       <!-- 人格特质与声望 -->
       <div class="panel-box">
@@ -271,7 +277,7 @@
             <table class="ability-table">
               <thead>
                 <tr>
-                  <th style="text-align:left;">特质</th>
+                  <th style="text-align:left; padding-left:4px;">特质</th>
                   <th style="width:56px;">数值<span class="en-sub">Score</span></th>
                 </tr>
               </thead>
@@ -286,7 +292,7 @@
             <table class="ability-table">
               <thead>
                 <tr>
-                  <th style="text-align:left;">声望内容</th>
+                  <th style="text-align:left; padding-left:4px;">声望内容</th>
                   <th style="width:38%;">类型<span class="en-sub">Type</span></th>
                   <th style="width:52px;">数值<span class="en-sub">Score</span></th>
                 </tr>
@@ -304,33 +310,37 @@
         <span class="corner-diamond bl"></span>
         <span class="corner-diamond br"></span>
 
+        <div class="section-title">
+          战斗<span class="en-sub">Combat</span>
+        </div>
         <div class="p2-combat-grid">
-          <div>
-            <div class="section-title">
-              战斗<span class="en-sub">Combat</span>
+          <div class="combat-lines-col">
+            <div class="combat-line-group">
+              <div class="field-row">
+                <label class="field-label combat-label">穿戴护甲<span class="en-sub">Armor Worn</span>:</label>
+                <input type="text" data-field="armor_worn_1" />
+              </div>
+              <div class="field-row combat-indent">
+                <input type="text" data-field="armor_worn_2" />
+              </div>
             </div>
-            <div class="field-row">
-              <label class="field-label">穿戴护甲<span class="en-sub">Armor Worn</span>:</label>
-              <input type="text" data-field="armor_worn_1" />
-            </div>
-            <div class="field-row">
-              <input type="text" data-field="armor_worn_2" />
-            </div>
-            <div class="field-row" style="margin-top:6px;">
-              <label class="field-label">战斗修正<span class="en-sub">Combat Modifiers</span>:</label>
-              <input type="text" data-field="combat_modifiers_1" />
-            </div>
-            <div class="field-row">
-              <input type="text" data-field="combat_modifiers_2" />
+            <div class="combat-line-group">
+              <div class="field-row">
+                <label class="field-label combat-label">战斗修正<span class="en-sub">Combat Modifiers</span>:</label>
+                <input type="text" data-field="combat_modifiers_1" />
+              </div>
+              <div class="field-row combat-indent">
+                <input type="text" data-field="combat_modifiers_2" />
+              </div>
             </div>
           </div>
 
           <div class="soak-box">
-            <div>
+            <div class="soak-item">
               <div class="field-label">吸收<span class="en-sub">Soak</span></div>
               <input type="text" class="big-score" data-field="soak" placeholder="+0" style="text-align:center;" />
             </div>
-            <div>
+            <div class="soak-item">
               <div class="field-label">护甲负重<span class="en-sub">Armor Load</span></div>
               <input type="number" class="big-score" data-field="armor_load" placeholder="0" />
             </div>
@@ -347,105 +357,113 @@
 
         <div class="p2-fatigue-wounds-grid">
           <!-- 疲劳等级 -->
-          <div>
+          <div class="fw-col">
             <div class="section-title">
               疲劳等级<span class="en-sub">Fatigue Levels</span>
             </div>
             <table class="fatigue-table">
+              <thead>
+                <tr>
+                  <th style="width:28px;">状态</th>
+                  <th style="width:38px;">惩罚</th>
+                  <th style="width:68px;">恢复</th>
+                  <th style="text-align:left; padding-left:6px;">等级</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr>
-                  <td style="width:24px;"><input type="checkbox" class="check-sq" data-field="fatigue_fresh" /></td>
-                  <td style="width:28px; text-align:center;"></td>
-                  <td style="width:64px; color:var(--ink-muted); font-size:11.5px;"></td>
-                  <td><strong>清爽</strong><span class="en-sub">Fresh</span></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" class="check-sq" data-field="fatigue_winded" /></td>
+                  <td style="text-align:center;"><input type="checkbox" class="check-sq" data-field="fatigue_fresh" /></td>
                   <td style="text-align:center; font-family:var(--font-mono);">0</td>
-                  <td style="color:var(--ink-muted); font-size:11.5px;">2 min.</td>
-                  <td><strong>乏力</strong><span class="en-sub">Winded</span></td>
+                  <td style="text-align:center; color:var(--ink-muted); font-size:11.5px;">—</td>
+                  <td style="padding-left:6px;"><strong>清爽</strong><span class="en-sub">Fresh</span></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" class="check-sq" data-field="fatigue_weary" /></td>
+                  <td style="text-align:center;"><input type="checkbox" class="check-sq" data-field="fatigue_winded" /></td>
+                  <td style="text-align:center; font-family:var(--font-mono);">0</td>
+                  <td style="text-align:center; color:var(--ink-muted); font-size:11.5px;">2 min.</td>
+                  <td style="padding-left:6px;"><strong>乏力</strong><span class="en-sub">Winded</span></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;"><input type="checkbox" class="check-sq" data-field="fatigue_weary" /></td>
                   <td style="text-align:center; font-family:var(--font-mono);">–1</td>
-                  <td style="color:var(--ink-muted); font-size:11.5px;">10 min.</td>
-                  <td><strong>疲惫</strong><span class="en-sub">Weary</span></td>
+                  <td style="text-align:center; color:var(--ink-muted); font-size:11.5px;">10 min.</td>
+                  <td style="padding-left:6px;"><strong>疲惫</strong><span class="en-sub">Weary</span></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" class="check-sq" data-field="fatigue_tired" /></td>
+                  <td style="text-align:center;"><input type="checkbox" class="check-sq" data-field="fatigue_tired" /></td>
                   <td style="text-align:center; font-family:var(--font-mono);">–3</td>
-                  <td style="color:var(--ink-muted); font-size:11.5px;">30 min.</td>
-                  <td><strong>力竭</strong><span class="en-sub">Tired</span></td>
+                  <td style="text-align:center; color:var(--ink-muted); font-size:11.5px;">30 min.</td>
+                  <td style="padding-left:6px;"><strong>力竭</strong><span class="en-sub">Tired</span></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" class="check-sq" data-field="fatigue_dazed" /></td>
+                  <td style="text-align:center;"><input type="checkbox" class="check-sq" data-field="fatigue_dazed" /></td>
                   <td style="text-align:center; font-family:var(--font-mono);">–5</td>
-                  <td style="color:var(--ink-muted); font-size:11.5px;">1 hr.</td>
-                  <td><strong>眩晕</strong><span class="en-sub">Dazed</span></td>
+                  <td style="text-align:center; color:var(--ink-muted); font-size:11.5px;">1 hr.</td>
+                  <td style="padding-left:6px;"><strong>眩晕</strong><span class="en-sub">Dazed</span></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" class="check-sq" data-field="fatigue_unconscious" /></td>
-                  <td style="text-align:center; font-family:var(--font-mono);"></td>
-                  <td style="color:var(--ink-muted); font-size:11.5px;">2 hr.</td>
-                  <td><strong>昏迷</strong><span class="en-sub">Unconscious</span></td>
+                  <td style="text-align:center;"><input type="checkbox" class="check-sq" data-field="fatigue_unconscious" /></td>
+                  <td style="text-align:center; font-family:var(--font-mono);">—</td>
+                  <td style="text-align:center; color:var(--ink-muted); font-size:11.5px;">2 hr.</td>
+                  <td style="padding-left:6px;"><strong>昏迷</strong><span class="en-sub">Unconscious</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 伤势 -->
-          <div>
+          <div class="fw-col">
             <div class="section-title">
               伤势<span class="en-sub">Wounds</span>
             </div>
             <table class="wounds-table">
               <thead>
                 <tr>
-                  <th style="text-align:left;">伤势等级</th>
-                  <th style="width:66px;">范围<span class="en-sub">Range</span></th>
-                  <th style="width:105px;">数量<span class="en-sub">Number</span></th>
+                  <th style="text-align:left; width:72px;">伤势等级</th>
+                  <th style="width:68px;">范围<span class="en-sub">Range</span></th>
+                  <th style="width:106px; text-align:left; padding-left:8px;">数量<span class="en-sub">Number</span></th>
                   <th style="width:46px;">惩罚<span class="en-sub">Penalty</span></th>
-                  <th>备注<span class="en-sub">Notes</span></th>
+                  <th style="text-align:left; padding-left:4px;">备注<span class="en-sub">Notes</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>轻伤</strong><span class="en-sub">Light Wounds</span></td>
+                  <td><strong>轻伤</strong><span class="en-sub">Light</span></td>
                   <td><input type="text" data-field="wound_light_range" placeholder="1–5" style="text-align:center;" /></td>
-                  <td style="text-align:center;" id="woundLightChecks"></td>
+                  <td class="wound-checks-cell" id="woundLightChecks"></td>
                   <td style="text-align:center; font-family:var(--font-mono);">–1</td>
                   <td><input type="text" data-field="wound_light_notes" /></td>
                 </tr>
                 <tr>
-                  <td><strong>中伤</strong><span class="en-sub">Medium Wounds</span></td>
+                  <td><strong>中伤</strong><span class="en-sub">Medium</span></td>
                   <td><input type="text" data-field="wound_medium_range" placeholder="6–10" style="text-align:center;" /></td>
-                  <td style="text-align:center;" id="woundMediumChecks"></td>
+                  <td class="wound-checks-cell" id="woundMediumChecks"></td>
                   <td style="text-align:center; font-family:var(--font-mono);">–3</td>
                   <td><input type="text" data-field="wound_medium_notes" /></td>
                 </tr>
                 <tr>
-                  <td><strong>重伤</strong><span class="en-sub">Heavy Wounds</span></td>
+                  <td><strong>重伤</strong><span class="en-sub">Heavy</span></td>
                   <td><input type="text" data-field="wound_heavy_range" placeholder="11–15" style="text-align:center;" /></td>
-                  <td style="text-align:center;" id="woundHeavyChecks"></td>
+                  <td class="wound-checks-cell" id="woundHeavyChecks"></td>
                   <td style="text-align:center; font-family:var(--font-mono);">–5</td>
                   <td><input type="text" data-field="wound_heavy_notes" /></td>
                 </tr>
                 <tr>
-                  <td><strong>休克</strong><span class="en-sub">Incapacitated</span></td>
+                  <td><strong>休克</strong><span class="en-sub">Incap.</span></td>
                   <td><input type="text" data-field="wound_incap_range" placeholder="16–20" style="text-align:center;" /></td>
-                  <td style="text-align:left; padding-left:10px;">
+                  <td class="wound-checks-cell">
                     <input type="checkbox" class="check-sq" data-field="wound_incap_1" />
                   </td>
-                  <td style="text-align:center;"></td>
+                  <td style="text-align:center; font-family:var(--font-mono);">—</td>
                   <td><input type="text" data-field="wound_incap_notes" /></td>
                 </tr>
                 <tr>
                   <td><strong>死亡</strong><span class="en-sub">Dead</span></td>
                   <td><input type="text" data-field="wound_dead_range" placeholder="21+" style="text-align:center;" /></td>
-                  <td style="text-align:left; padding-left:10px;">
+                  <td class="wound-checks-cell">
                     <input type="checkbox" class="check-sq" data-field="wound_dead_1" />
                   </td>
-                  <td style="text-align:center;"></td>
+                  <td style="text-align:center; font-family:var(--font-mono);">—</td>
                   <td><input type="text" data-field="wound_dead_notes" /></td>
                 </tr>
               </tbody>
@@ -467,13 +485,29 @@
         <table class="weapons-table">
           <thead>
             <tr>
-              <th style="text-align:left; width:15%;">武器名称</th>
-              <th>机敏+武器–负荷=先攻<br/><span class="en-sub">Qik + Weap – Enc = INIT</span></th>
-              <th>灵巧+能力+武器=攻击<br/><span class="en-sub">Dex + Ability + Weap = ATK</span></th>
-              <th>机敏+能力+武器=防御<br/><span class="en-sub">Qik + Ability + Weap = DFN</span></th>
-              <th>力量+武器=伤害<br/><span class="en-sub">Str + Weap = DAM</span></th>
-              <th style="width:44px;">负重<br/><span class="en-sub">Load</span></th>
-              <th style="width:48px;">射程<br/><span class="en-sub">Range</span></th>
+              <th style="text-align:left; width:15%; padding-left:4px;">武器名称</th>
+              <th>
+                <div class="formula-group formula-header">
+                  <span>机敏</span><span class="op">+</span><span>武器</span><span class="op">–</span><span>负荷</span><span class="op">=</span><span class="res">先攻</span>
+                </div>
+              </th>
+              <th>
+                <div class="formula-group formula-header">
+                  <span>灵巧</span><span class="op">+</span><span>能力</span><span class="op">+</span><span>武器</span><span class="op">=</span><span class="res">攻击</span>
+                </div>
+              </th>
+              <th>
+                <div class="formula-group formula-header">
+                  <span>机敏</span><span class="op">+</span><span>能力</span><span class="op">+</span><span>武器</span><span class="op">=</span><span class="res">防御</span>
+                </div>
+              </th>
+              <th>
+                <div class="formula-group formula-header">
+                  <span>力量</span><span class="op">+</span><span>武器</span><span class="op">=</span><span class="res">伤害</span>
+                </div>
+              </th>
+              <th style="width:42px;">负重</th>
+              <th style="width:48px;">射程</th>
             </tr>
           </thead>
           <tbody id="weaponsBody"></tbody>
@@ -481,7 +515,7 @@
       </div>
 
       <!-- 装备表 -->
-      <div class="panel-box">
+      <div class="panel-box" style="margin-bottom:0;">
         <span class="corner-diamond tl"></span>
         <span class="corner-diamond tr"></span>
         <span class="corner-diamond bl"></span>
@@ -502,7 +536,7 @@
          PAGE 3: 学派结社信息、魔法秘艺、基础施法总值、工坊、长寿仪式、源质、魔宠
          ========================================================== -->
     <section id="page-3" class="sheet-page">
-      <span class="page-badge">Page 3 / 4</span>
+      <span class="page-badge">3 / 4 页</span>
 
       <!-- 顶部赫尔墨斯学派与结社信息 -->
       <div class="panel-box">
@@ -512,7 +546,7 @@
         <span class="corner-diamond br"></span>
 
         <div class="p3-hermetic-top">
-          <div>
+          <div class="hermetic-col">
             <div class="field-row">
               <label class="field-label">学派<span class="en-sub">House</span>:</label>
               <input type="text" data-field="p3_house" list="datalist-houses" />
@@ -525,9 +559,13 @@
               <label class="field-label">法师徽记<span class="en-sub">Wizard's Sigil</span>:</label>
               <input type="text" data-field="wizards_sigil" />
             </div>
+            <div class="field-row">
+              <label class="field-label" style="visibility:hidden;">法师徽记:</label>
+              <input type="text" data-field="wizards_sigil_2" placeholder="（徽记补充描述）" />
+            </div>
           </div>
 
-          <div>
+          <div class="hermetic-col">
             <div class="field-row">
               <label class="field-label">宗庭<span class="en-sub">Domus Magna</span>:</label>
               <input type="text" data-field="domus_magna" />
@@ -541,7 +579,7 @@
               <input type="text" data-field="parens" />
             </div>
             <div class="field-row">
-              <label class="field-label">学徒期结社<span class="en-sub">Covenant of Apprenticeship</span>:</label>
+              <label class="field-label">学徒期结社<span class="en-sub">Apprenticeship</span>:</label>
               <input type="text" data-field="covenant_apprenticeship" />
             </div>
           </div>
@@ -555,12 +593,12 @@
         <span class="corner-diamond bl"></span>
         <span class="corner-diamond br"></span>
 
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div class="section-title" style="border-bottom:none; margin-bottom:2px;">
+        <div class="section-header-row">
+          <div class="section-title" style="border-bottom:none; margin-bottom:0;">
             魔法秘艺<span class="en-sub">Magical Arts</span>
           </div>
           <button type="button" id="btnToggleMatrix" class="btn no-print" style="padding:2px 8px; font-size:11px;">
-            📊 展开/收起 5×10 秘艺施法速查表
+            展开/收起秘艺施法速查表
           </button>
         </div>
 
@@ -569,9 +607,9 @@
           <table class="art-table">
             <thead>
               <tr>
-                <th style="width:28px;">经验<span class="en-sub">Exp</span></th>
-                <th style="text-align:left;">技法<span class="en-sub">Technique</span></th>
-                <th style="width:58px;">数值<span class="en-sub">Score</span></th>
+                <th style="width:32px;">经验</th>
+                <th style="text-align:left; padding-left:4px;">技法<span class="en-sub">Technique</span></th>
+                <th style="width:58px;">数值</th>
               </tr>
             </thead>
             <tbody id="techniquesBody"></tbody>
@@ -581,9 +619,9 @@
           <table class="art-table">
             <thead>
               <tr>
-                <th style="width:28px;">经验<span class="en-sub">Exp</span></th>
-                <th style="text-align:left;">型式<span class="en-sub">Form</span></th>
-                <th style="width:58px;">数值<span class="en-sub">Score</span></th>
+                <th style="width:32px;">经验</th>
+                <th style="text-align:left; padding-left:4px;">型式<span class="en-sub">Form</span></th>
+                <th style="width:58px;">数值</th>
               </tr>
             </thead>
             <tbody id="formsCol1Body"></tbody>
@@ -593,9 +631,9 @@
           <table class="art-table">
             <thead>
               <tr>
-                <th style="width:28px;">经验<span class="en-sub">Exp</span></th>
-                <th style="text-align:left;">型式<span class="en-sub">Form</span></th>
-                <th style="width:58px;">数值<span class="en-sub">Score</span></th>
+                <th style="width:32px;">经验</th>
+                <th style="text-align:left; padding-left:4px;">型式<span class="en-sub">Form</span></th>
+                <th style="width:58px;">数值</th>
               </tr>
             </thead>
             <tbody id="formsCol2Body"></tbody>
@@ -605,7 +643,7 @@
         <!-- 可展开的 5x10 技法×型式 施法总值矩阵 (打印时默认隐藏，也可参考) -->
         <div id="castingMatrixWrap" class="no-print" style="display:none; margin-top:10px;">
           <div style="font-size:11.5px; color:var(--ink-muted); margin-bottom:4px;">
-            <strong>5×10 范式施法基础值矩阵</strong>（计算公式：技法 + 型式 + 耐力 + 辉环；括号内为无疲劳即兴值 = 除以5向下取整）：
+            <strong>范式施法基础值矩阵</strong>（计算公式：技法 + 型式 + 耐力 + 辉环；括号内为无疲劳即兴值）：
           </div>
           <table class="matrix-table" id="castingMatrixTable"></table>
         </div>
@@ -620,210 +658,218 @@
 
         <div class="p3-casting-lab-grid">
           <!-- 左栏：基础施法总值 -->
-          <div>
+          <div class="casting-left-col">
             <div class="section-title">
               基础施法总值<span class="en-sub">Base Casting Totals</span>
             </div>
             <div class="casting-formulas-note">
-              <div><strong>范式<span class="en-sub">Formulaic</span>：</strong>技法 + 型式 + 耐力 + 辉环 + 骰值</div>
-              <div><strong>仪式<span class="en-sub">Ritual</span>：</strong>技法 + 型式 + 耐力 + 辉环 + 自由七艺 + 哲学 + 骰值</div>
-              <div><strong>即兴（疲劳）<span class="en-sub">Spontaneous (Fatigue)</span>：</strong>(技法 + 型式 + 耐力 + 辉环 + 压力骰) / 2</div>
-              <div><strong>即兴（无疲劳）<span class="en-sub">Spontaneous (No Fatigue)</span>：</strong>(技法 + 型式 + 耐力 + 辉环) / 5</div>
+              <div><strong>范式：</strong>技法 + 型式 + 耐力 + 辉环 + 骰值</div>
+              <div><strong>仪式：</strong>技法 + 型式 + 耐力 + 辉环 + 自由七艺 + 哲学 + 骰值</div>
+              <div><strong>即兴（疲劳）：</strong>(技法 + 型式 + 耐力 + 辉环 + 压力骰) / 2</div>
+              <div><strong>即兴（无疲劳）：</strong>(技法 + 型式 + 耐力 + 辉环) / 5</div>
             </div>
 
-            <!-- 疾速施法速度 -->
-            <div class="calc-block">
-              <div class="calc-block-header">
-                <span>疾速施法速度<span class="en-sub">Fast Casting Speed</span></span>
-                <span class="calc-subnote">(+ 压力骰<span class="en-sub">+ stress die</span>)</span>
+            <div class="calc-blocks-stack">
+              <!-- 快速施法速度 -->
+              <div class="calc-block">
+                <div class="calc-block-header">
+                  <span>快速施法速度<span class="en-sub">Fast Casting Speed</span></span>
+                  <span class="calc-subnote">(+ 压力骰)</span>
+                </div>
+                <div class="calc-equation">
+                  <div class="eq-col">
+                    <input type="number" data-field="fc_qik" />
+                    <span>机敏</span>
+                  </div>
+                  <strong class="eq-op">+</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="fc_finesse" />
+                    <span>精密</span>
+                  </div>
+                  <strong class="eq-op">=</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="fc_total" class="calc-output" readonly />
+                    <span><strong>总值</strong></span>
+                  </div>
+                </div>
               </div>
-              <div class="calc-equation">
-                <div class="eq-col">
-                  <input type="number" data-field="fc_qik" />
-                  <span>机敏<span class="en-sub">Qik</span></span>
-                </div>
-                <strong>+</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="fc_finesse" />
-                  <span>精密<span class="en-sub">Finesse</span></span>
-                </div>
-                <strong>=</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="fc_total" class="calc-output" readonly />
-                  <span><strong>总值<span class="en-sub">TOTAL</span></strong></span>
-                </div>
-              </div>
-            </div>
 
-            <!-- 判定效果 -->
-            <div class="calc-block">
-              <div class="calc-block-header">
-                <span>判定效果<span class="en-sub">Determining Effect</span></span>
-                <span class="calc-subnote">(+ 骰值，对抗 15–能级<span class="en-sub">+ die, vs. 15–magnitude</span>)</span>
+              <!-- 判定效果 -->
+              <div class="calc-block">
+                <div class="calc-block-header">
+                  <span>判定效果<span class="en-sub">Determining Effect</span></span>
+                  <span class="calc-subnote">(+ 骰值，对抗 15–能级)</span>
+                </div>
+                <div class="calc-equation">
+                  <div class="eq-col">
+                    <input type="number" data-field="de_per" />
+                    <span>感知</span>
+                  </div>
+                  <strong class="eq-op">+</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="de_awareness" />
+                    <span>察觉</span>
+                  </div>
+                  <strong class="eq-op">=</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="de_total" class="calc-output" readonly />
+                    <span><strong>总值</strong></span>
+                  </div>
+                </div>
               </div>
-              <div class="calc-equation">
-                <div class="eq-col">
-                  <input type="number" data-field="de_per" />
-                  <span>感知<span class="en-sub">Per</span></span>
-                </div>
-                <strong>+</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="de_awareness" />
-                  <span>察觉<span class="en-sub">Awareness</span></span>
-                </div>
-                <strong>=</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="de_total" class="calc-output" readonly />
-                  <span><strong>总值<span class="en-sub">TOTAL</span></strong></span>
-                </div>
-              </div>
-            </div>
 
-            <!-- 基础瞄准 -->
-            <div class="calc-block">
-              <div class="calc-block-header">
-                <span>基础瞄准<span class="en-sub">Base Targeting</span></span>
-                <span class="calc-subnote">(+ 骰值<span class="en-sub">+ die</span>)</span>
+              <!-- 基础瞄准 -->
+              <div class="calc-block">
+                <div class="calc-block-header">
+                  <span>基础瞄准<span class="en-sub">Base Targeting</span></span>
+                  <span class="calc-subnote">(+ 骰值)</span>
+                </div>
+                <div class="calc-equation">
+                  <div class="eq-col">
+                    <input type="number" data-field="bt_per" />
+                    <span>感知</span>
+                  </div>
+                  <strong class="eq-op">+</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="bt_finesse" />
+                    <span>精密</span>
+                  </div>
+                  <strong class="eq-op">=</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="bt_total" class="calc-output" readonly />
+                    <span><strong>总值</strong></span>
+                  </div>
+                </div>
               </div>
-              <div class="calc-equation">
-                <div class="eq-col">
-                  <input type="number" data-field="bt_per" />
-                  <span>感知<span class="en-sub">Per</span></span>
-                </div>
-                <strong>+</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="bt_finesse" />
-                  <span>精密<span class="en-sub">Finesse</span></span>
-                </div>
-                <strong>=</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="bt_total" class="calc-output" readonly />
-                  <span><strong>总值<span class="en-sub">TOTAL</span></strong></span>
-                </div>
-              </div>
-            </div>
 
-            <!-- 专注 -->
-            <div class="calc-block">
-              <div class="calc-block-header">
-                <span>专注<span class="en-sub">Concentration</span></span>
-                <span class="calc-subnote">(+ 骰值<span class="en-sub">+ die</span>)</span>
-              </div>
-              <div class="calc-equation">
-                <div class="eq-col">
-                  <input type="number" data-field="conc_sta" />
-                  <span>耐力<span class="en-sub">Sta</span></span>
-                </div>
-                <strong>+</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="conc_skill" />
+              <!-- 专注 -->
+              <div class="calc-block">
+                <div class="calc-block-header">
                   <span>专注<span class="en-sub">Concentration</span></span>
+                  <span class="calc-subnote">(+ 骰值)</span>
                 </div>
-                <strong>=</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="conc_total" class="calc-output" readonly />
-                  <span><strong>总值<span class="en-sub">TOTAL</span></strong></span>
+                <div class="calc-equation">
+                  <div class="eq-col">
+                    <input type="number" data-field="conc_sta" />
+                    <span>耐力</span>
+                  </div>
+                  <strong class="eq-op">+</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="conc_skill" />
+                    <span>专注</span>
+                  </div>
+                  <strong class="eq-op">=</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="conc_total" class="calc-output" readonly />
+                    <span><strong>总值</strong></span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- 魔法抗性 -->
-            <div class="calc-block">
-              <div class="calc-block-header">
-                <span>魔法抗性<span class="en-sub">Magic Resistance</span></span>
-                <span class="calc-subnote">(+ 型式<span class="en-sub">+ Form</span>)</span>
-              </div>
-              <div class="calc-equation">
-                <div class="eq-col">
-                  <input type="number" data-field="mr_parma" />
-                  <span>绛咒<span class="en-sub">Parma</span></span>
+              <!-- 魔法抗性 -->
+              <div class="calc-block" style="margin-bottom:0;">
+                <div class="calc-block-header">
+                  <span>魔法抗性<span class="en-sub">Magic Resistance</span></span>
+                  <span class="calc-subnote">(+ 型式)</span>
                 </div>
-                <strong>× 5 =</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="mr_total" class="calc-output" readonly />
-                  <span><strong>总值<span class="en-sub">TOTAL</span></strong></span>
+                <div class="calc-equation">
+                  <div class="eq-col">
+                    <input type="number" data-field="mr_parma" />
+                    <span>绛咒</span>
+                  </div>
+                  <strong class="eq-op eq-op-wide">× 5 =</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="mr_total" class="calc-output" readonly />
+                    <span><strong>总值</strong></span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- 右栏：工坊、长寿仪式、源质 -->
-          <div>
-            <div class="section-title">
-              工坊<span class="en-sub">Lab</span>
-            </div>
-            <div class="calc-block">
-              <div class="calc-block-header">
-                <span>基础工坊总值<span class="en-sub">Basic Lab Total</span></span>
-                <span class="calc-subnote">(+ 技法 + 型式<span class="en-sub">+ Technique + Form</span>)</span>
+          <div class="casting-right-col">
+            <div>
+              <div class="section-title">
+                工坊<span class="en-sub">Lab</span>
               </div>
-              <div class="calc-equation">
-                <div class="eq-col">
-                  <input type="number" data-field="lab_int" />
-                  <span>智力<span class="en-sub">Int</span></span>
+              <div class="calc-block">
+                <div class="calc-block-header">
+                  <span>基础工坊总值<span class="en-sub">Basic Lab Total</span></span>
+                  <span class="calc-subnote">(+ 技法 + 型式)</span>
                 </div>
-                <strong>+</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="lab_theory" />
-                  <span>魔法理论<span class="en-sub">Theory</span></span>
-                </div>
-                <strong>+</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="lab_aura" placeholder="0" />
-                  <span>辉环<span class="en-sub">Aura</span></span>
-                </div>
-                <strong>=</strong>
-                <div class="eq-col">
-                  <input type="number" data-field="lab_total" class="calc-output" readonly />
-                  <span><strong>总值<span class="en-sub">TOTAL</span></strong></span>
+                <div class="calc-equation">
+                  <div class="eq-col">
+                    <input type="number" data-field="lab_int" />
+                    <span>智力</span>
+                  </div>
+                  <strong class="eq-op">+</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="lab_theory" />
+                    <span>魔法理论</span>
+                  </div>
+                  <strong class="eq-op">+</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="lab_aura" placeholder="0" />
+                    <span>辉环</span>
+                  </div>
+                  <strong class="eq-op">=</strong>
+                  <div class="eq-col">
+                    <input type="number" data-field="lab_total" class="calc-output" readonly />
+                    <span><strong>总值</strong></span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- 长寿仪式 -->
-            <div class="section-title" style="margin-top:12px;">
-              长寿仪式<span class="en-sub">Longevity Ritual</span>
-            </div>
-            <div class="bio-two-col" style="margin-bottom:6px;">
-              <div class="field-row">
-                <label class="field-label">工坊总值<span class="en-sub">Lab Total</span>:</label>
-                <input type="number" data-field="longevity_lab_total" />
+            <div>
+              <div class="section-title" style="margin-top:8px;">
+                长寿仪式<span class="en-sub">Longevity Ritual</span>
               </div>
-              <div class="field-row">
-                <label class="field-label">衰老检定修正<span class="en-sub">Age Roll Mod.</span>:</label>
-                <input type="text" data-field="longevity_age_mod" placeholder="-0" />
+              <div class="bio-two-col" style="margin-bottom:4px;">
+                <div class="field-row">
+                  <label class="field-label">工坊总值:</label>
+                  <input type="number" data-field="longevity_lab_total" />
+                </div>
+                <div class="field-row">
+                  <label class="field-label">衰老检定修正:</label>
+                  <input type="text" data-field="longevity_age_mod" placeholder="-0" />
+                </div>
               </div>
+              <div class="field-label" style="margin-bottom:3px;">黄昏之痕<span class="en-sub">Twilight Scars</span>:</div>
+              <div id="twilightScarsList" class="lined-list" style="margin-bottom:8px;"></div>
             </div>
-            <div class="field-label" style="margin-bottom:4px;">暮光之痕<span class="en-sub">Twilight Scars</span>:</div>
-            <div id="twilightScarsList" class="lined-list" style="margin-bottom:12px;"></div>
 
             <!-- 源质 -->
-            <div class="section-title">
-              源质<span class="en-sub">Raw Vis</span>
+            <div class="vis-section-wrap">
+              <div class="section-title">
+                源质<span class="en-sub">Raw Vis</span>
+              </div>
+              <table class="vis-table">
+                <thead>
+                  <tr>
+                    <th style="width:28%; text-align:left; padding-left:4px;">秘艺</th>
+                    <th style="width:18%;">卒</th>
+                    <th style="text-align:left; padding-left:4px;">物理形态</th>
+                  </tr>
+                </thead>
+                <tbody id="rawVisBody"></tbody>
+              </table>
             </div>
-            <table class="vis-table">
-              <thead>
-                <tr>
-                  <th style="width:28%;">秘艺<span class="en-sub">Art</span></th>
-                  <th style="width:18%;">卒<span class="en-sub">Pawns</span></th>
-                  <th style="text-align:left;">物理形态<span class="en-sub">Physical Form</span></th>
-                </tr>
-              </thead>
-              <tbody id="rawVisBody"></tbody>
-            </table>
           </div>
         </div>
       </div>
 
       <!-- 魔宠 (Familiar) -->
-      <div class="panel-box">
+      <div class="panel-box" style="margin-bottom:0;">
         <span class="corner-diamond tl"></span>
         <span class="corner-diamond tr"></span>
         <span class="corner-diamond bl"></span>
         <span class="corner-diamond br"></span>
 
         <div class="field-row" style="margin-bottom:8px;">
-          <label class="section-title" style="border-bottom:none; margin-bottom:0;">
+          <label class="section-title" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
             魔宠<span class="en-sub">Familiar</span>:
           </label>
           <input type="text" data-field="familiar_name" placeholder="魔宠名称与物种" />
@@ -831,49 +877,49 @@
 
         <div class="p3-familiar-grid">
           <!-- 魔宠八属性 -->
-          <div>
-            <div class="field-row"><label class="field-label">智力/狡黠<span class="en-sub">Int/Cun</span>:</label><input type="text" data-field="fam_int" /></div>
-            <div class="field-row"><label class="field-label">感知<span class="en-sub">Per</span>:</label><input type="text" data-field="fam_per" /></div>
-            <div class="field-row"><label class="field-label">力量<span class="en-sub">Str</span>:</label><input type="text" data-field="fam_str" /></div>
-            <div class="field-row"><label class="field-label">耐力<span class="en-sub">Sta</span>:</label><input type="text" data-field="fam_sta" /></div>
-            <div class="field-row"><label class="field-label">仪态<span class="en-sub">Pre</span>:</label><input type="text" data-field="fam_pre" /></div>
-            <div class="field-row"><label class="field-label">沟通<span class="en-sub">Com</span>:</label><input type="text" data-field="fam_com" /></div>
-            <div class="field-row"><label class="field-label">灵巧<span class="en-sub">Dex</span>:</label><input type="text" data-field="fam_dex" /></div>
-            <div class="field-row"><label class="field-label">机敏<span class="en-sub">Qik</span>:</label><input type="text" data-field="fam_qik" /></div>
+          <div class="fam-stats-col">
+            <div class="field-row"><label class="field-label">智力:</label><input type="text" data-field="fam_int" /></div>
+            <div class="field-row"><label class="field-label">感知:</label><input type="text" data-field="fam_per" /></div>
+            <div class="field-row"><label class="field-label">力量:</label><input type="text" data-field="fam_str" /></div>
+            <div class="field-row"><label class="field-label">耐力:</label><input type="text" data-field="fam_sta" /></div>
+            <div class="field-row"><label class="field-label">仪态:</label><input type="text" data-field="fam_pre" /></div>
+            <div class="field-row"><label class="field-label">沟通:</label><input type="text" data-field="fam_com" /></div>
+            <div class="field-row"><label class="field-label">灵巧:</label><input type="text" data-field="fam_dex" /></div>
+            <div class="field-row"><label class="field-label">机敏:</label><input type="text" data-field="fam_qik" /></div>
           </div>
 
           <!-- 魔宠体型与战斗数值 -->
-          <div>
-            <div class="field-row"><label class="field-label">体型<span class="en-sub">Size</span>:</label><input type="text" data-field="fam_size" /></div>
-            <div class="field-row"><label class="field-label">权能<span class="en-sub">Might</span>:</label><input type="text" data-field="fam_might" /></div>
-            <div class="field-row"><label class="field-label">吸收<span class="en-sub">Soak</span>:</label><input type="text" data-field="fam_soak" /></div>
-            <div class="field-row"><label class="field-label">疲劳<span class="en-sub">Fat</span>:</label><input type="text" data-field="fam_fat" /></div>
-            <div class="field-row"><label class="field-label">先攻<span class="en-sub">Init</span>:</label><input type="text" data-field="fam_init" /></div>
-            <div class="field-row"><label class="field-label">攻击<span class="en-sub">Atk</span>:</label><input type="text" data-field="fam_atk" /></div>
-            <div class="field-row"><label class="field-label">防御<span class="en-sub">Dfn</span>:</label><input type="text" data-field="fam_dfn" /></div>
-            <div class="field-row"><label class="field-label">伤害<span class="en-sub">Dam</span>:</label><input type="text" data-field="fam_dam" /></div>
+          <div class="fam-stats-col">
+            <div class="field-row"><label class="field-label">体型:</label><input type="text" data-field="fam_size" /></div>
+            <div class="field-row"><label class="field-label">权能:</label><input type="text" data-field="fam_might" /></div>
+            <div class="field-row"><label class="field-label">吸收:</label><input type="text" data-field="fam_soak" /></div>
+            <div class="field-row"><label class="field-label">疲劳:</label><input type="text" data-field="fam_fat" /></div>
+            <div class="field-row"><label class="field-label">先攻:</label><input type="text" data-field="fam_init" /></div>
+            <div class="field-row"><label class="field-label">攻击:</label><input type="text" data-field="fam_atk" /></div>
+            <div class="field-row"><label class="field-label">防御:</label><input type="text" data-field="fam_dfn" /></div>
+            <div class="field-row"><label class="field-label">伤害:</label><input type="text" data-field="fam_dam" /></div>
           </div>
 
           <!-- 三重羁绊绳索与纽带特质 -->
-          <div>
+          <div class="fam-bond-col">
             <div class="cords-row">
               <div class="field-row">
-                <label class="field-label">铜线<span class="en-sub">Bronze Cord</span>:</label>
+                <label class="field-label">铜索:</label>
                 <input type="number" data-field="fam_bronze_cord" />
               </div>
               <div class="field-row">
-                <label class="field-label">银索<span class="en-sub">Silver Cord</span>:</label>
+                <label class="field-label">银索:</label>
                 <input type="number" data-field="fam_silver_cord" />
               </div>
               <div class="field-row">
-                <label class="field-label">金绳<span class="en-sub">Gold Cord</span>:</label>
+                <label class="field-label">金索:</label>
                 <input type="number" data-field="fam_gold_cord" />
               </div>
             </div>
-            <div class="field-label" style="margin-bottom:4px;">
+            <div class="field-label" style="margin:2px 0 4px;">
               纽带特质与能力<span class="en-sub">Bond Qualities &amp; Abilities</span>:
             </div>
-            <div id="famBondList" class="lined-list"></div>
+            <div id="famBondList" class="lined-list stretch-list"></div>
           </div>
         </div>
       </div>
@@ -887,9 +933,9 @@
          PAGE 4: 法术记录页 (12个标准法术栏位)
          ========================================================== -->
     <section id="page-4" class="sheet-page">
-      <span class="page-badge">Page 4 / 4</span>
+      <span class="page-badge">4 / 4 页</span>
 
-      <div class="panel-box">
+      <div class="panel-box" style="margin-bottom:0;">
         <span class="corner-diamond tl"></span>
         <span class="corner-diamond tr"></span>
         <span class="corner-diamond bl"></span>
@@ -913,27 +959,38 @@
   <div id="glossaryDrawer" class="drawer-overlay no-print">
     <div class="drawer-panel">
       <div class="drawer-header">
-        <h3>《魔法秘艺》术语对照速查表</h3>
+        <h3>《魔法秘艺》术语对照速查表（校订版）</h3>
         <button type="button" id="btnCloseGlossary" class="btn">✕ 关闭</button>
       </div>
       <div class="drawer-body">
         <div class="glossary-controls">
-          <input type="text" id="glossarySearchInput" placeholder="输入英文或中文检索（如：Parma、绛咒、Flambeau、火球...）" />
+          <input type="text" id="glossarySearchInput" placeholder="输入英文或中文检索（如：Parma、绛咒、Seven League、七里之步、轻声施法...）" />
           <select id="glossaryCatFilter">
             <option value="ALL">全部分类</option>
             <option value="学派">学派</option>
+            <option value="战斗流派">战斗流派</option>
+            <option value="战斗职业与身份">战斗职业与身份</option>
+            <option value="结社与团体">结社与团体</option>
+            <option value="秘仪道路">秘仪道路</option>
+            <option value="宗教修会">宗教修会</option>
             <option value="秘艺与型式">秘艺与型式</option>
+            <option value="非赫尔墨斯魔法秘艺">非赫尔墨斯魔法秘艺</option>
             <option value="能力">能力</option>
             <option value="优势与劣势">优势与劣势</option>
             <option value="法术">法术</option>
             <option value="游戏术语">游戏术语</option>
+            <option value="形状与材料">形状与材料</option>
+            <option value="拉丁文与其他">拉丁文与其他</option>
+            <option value="人名">人名</option>
+            <option value="地名">地名</option>
+            <option value="书目与作品">书目与作品</option>
           </select>
         </div>
         <table class="glossary-result-table">
           <thead>
             <tr>
-              <th style="width:92px;">分类</th>
-              <th>英文 (English)</th>
+              <th style="width:110px;">分类</th>
+              <th>英文</th>
               <th>中文译名</th>
               <th style="width:95px;">出处</th>
             </tr>

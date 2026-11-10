@@ -9,7 +9,7 @@
   let state = {
     activeSlotId: "default",
     autoCalc: true,
-    bilingual: true,
+    bilingual: false,
     slots: {
       default: {
         name: "默认角色",
@@ -31,13 +31,13 @@
   ];
 
   // ==========================================================================
-  // 1. 初始化 DOM 结构生成 (动态渲染重复行以保持 HTML 整洁)
+  // 1. 初始化 DOM 结构生成 (动态渲染重复行以保持 HTML 整洁与严格等高对齐)
   // ==========================================================================
   function buildSheetDOM() {
-    // 1.1 衰老影响 (5行) & 扭曲影响 (5行)
+    // 1.1 衰老影响 (7行) & 扭曲影响 (7行)，与右侧9行个人出身资料严格等高对齐
     const agingList = document.getElementById("agingEffectsList");
     const warpingList = document.getElementById("warpingEffectsList");
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 7; i++) {
       agingList.insertAdjacentHTML(
         "beforeend",
         `<input type="text" data-field="aging_effect_${i}" />`
@@ -131,7 +131,7 @@
       );
     }
 
-    // 1.6 Page 2: 伤势复选框 (轻/中/重各5格)
+    // 1.6 Page 2: 伤势复选框 (轻/中/重各5格，与休克/死亡第1格垂直对齐)
     const lightChecks = document.getElementById("woundLightChecks");
     const mediumChecks = document.getElementById("woundMediumChecks");
     const heavyChecks = document.getElementById("woundHeavyChecks");
@@ -150,52 +150,52 @@
       );
     }
 
-    // 1.7 Page 2: 武器表 (6行)
+    // 1.7 Page 2: 武器表 (6行，子列与表头 1:1 严格对齐)
     const weaponsBody = document.getElementById("weaponsBody");
     for (let i = 1; i <= 6; i++) {
       weaponsBody.insertAdjacentHTML(
         "beforeend",
         `<tr>
           <td><input type="text" data-field="wp_${i}_name" placeholder="武器 ${i}" /></td>
-          <td>
+          <td style="text-align:center;">
             <div class="formula-group">
               <input type="number" data-field="wp_${i}_init_qik" placeholder="Qik" />
-              <span>+</span>
+              <span class="op">+</span>
               <input type="number" data-field="wp_${i}_init_weap" placeholder="Wp" />
-              <span>–</span>
+              <span class="op">–</span>
               <input type="number" data-field="wp_${i}_init_enc" placeholder="Enc" />
-              <span>=</span>
+              <span class="op">=</span>
               <input type="number" data-field="wp_${i}_init_total" class="calc-output" readonly />
             </div>
           </td>
-          <td>
+          <td style="text-align:center;">
             <div class="formula-group">
               <input type="number" data-field="wp_${i}_atk_dex" placeholder="Dex" />
-              <span>+</span>
+              <span class="op">+</span>
               <input type="number" data-field="wp_${i}_atk_ab" placeholder="Ab" />
-              <span>+</span>
+              <span class="op">+</span>
               <input type="number" data-field="wp_${i}_atk_weap" placeholder="Wp" />
-              <span>=</span>
+              <span class="op">=</span>
               <input type="number" data-field="wp_${i}_atk_total" class="calc-output" readonly />
             </div>
           </td>
-          <td>
+          <td style="text-align:center;">
             <div class="formula-group">
               <input type="number" data-field="wp_${i}_dfn_qik" placeholder="Qik" />
-              <span>+</span>
+              <span class="op">+</span>
               <input type="number" data-field="wp_${i}_dfn_ab" placeholder="Ab" />
-              <span>+</span>
+              <span class="op">+</span>
               <input type="number" data-field="wp_${i}_dfn_weap" placeholder="Wp" />
-              <span>=</span>
+              <span class="op">=</span>
               <input type="number" data-field="wp_${i}_dfn_total" class="calc-output" readonly />
             </div>
           </td>
-          <td>
+          <td style="text-align:center;">
             <div class="formula-group">
               <input type="number" data-field="wp_${i}_dam_str" placeholder="Str" />
-              <span>+</span>
+              <span class="op">+</span>
               <input type="number" data-field="wp_${i}_dam_weap" placeholder="Wp" />
-              <span>=</span>
+              <span class="op">=</span>
               <input type="number" data-field="wp_${i}_dam_total" class="calc-output" readonly />
             </div>
           </td>
@@ -221,7 +221,7 @@
         "beforeend",
         `<tr>
           <td style="text-align:center;"><input type="text" class="exp-box" data-field="art_${t.key}_exp" /></td>
-          <td><strong>${t.cn}</strong><span class="en-sub">${t.en}</span></td>
+          <td style="padding-left:4px;"><strong>${t.cn}</strong><span class="en-sub">${t.en}</span></td>
           <td><input type="number" data-field="art_${t.key}_score" placeholder="0" /></td>
         </tr>`
       );
@@ -235,13 +235,13 @@
         "beforeend",
         `<tr>
           <td style="text-align:center;"><input type="text" class="exp-box" data-field="art_${f.key}_exp" /></td>
-          <td><strong>${f.cn}</strong><span class="en-sub">${f.en}</span></td>
+          <td style="padding-left:4px;"><strong>${f.cn}</strong><span class="en-sub">${f.en}</span></td>
           <td><input type="number" data-field="art_${f.key}_score" placeholder="0" /></td>
         </tr>`
       );
     });
 
-    // 1.10 Page 3: 暮光之痕 (4行)、源质 (8行)、魔宠纽带特质 (6行)
+    // 1.10 Page 3: 黄昏之痕 (4行)、源质 (8行)、魔宠纽带特质 (6行)
     const scarsList = document.getElementById("twilightScarsList");
     for (let i = 1; i <= 4; i++) {
       scarsList.insertAdjacentHTML(
@@ -535,7 +535,6 @@
     // 3.7 武器行公式计算 (6行)
     for (let i = 1; i <= 6; i++) {
       const wpName = document.querySelector(`[data-field="wp_${i}_name"]`)?.value;
-      // 若填写了武器名且属性格为空，自动填入角色属性
       if (wpName) {
         const initQikEl = document.querySelector(`[data-field="wp_${i}_init_qik"]`);
         const atkDexEl = document.querySelector(`[data-field="wp_${i}_atk_dex"]`);
@@ -745,7 +744,6 @@
     const tbody = document.getElementById("glossaryTableBody");
     if (!tbody) return;
 
-    // 汇总所有词条
     const allItems = [];
     window.ARS_GLOSSARY.techniques.forEach((t) =>
       allItems.push({ cat: "秘艺与型式", en: `${t.en} (${t.abbr})`, cn: t.cn, src: "总表·核心" })
@@ -783,7 +781,6 @@
   // 6. 事件绑定
   // ==========================================================================
   function bindEvents() {
-    // 监听所有表单输入变化
     document.addEventListener("input", (e) => {
       const target = e.target;
       const field = target.getAttribute("data-field");
@@ -800,14 +797,12 @@
       saveToStorage();
     });
 
-    // 切换角色存档槽位
     document.getElementById("slotSelect")?.addEventListener("change", (e) => {
       state.activeSlotId = e.target.value;
       saveToStorage();
       applyStateToDOM();
     });
 
-    // 新建角色槽位
     document.getElementById("btnNewSlot")?.addEventListener("click", () => {
       const name = prompt("请输入新角色的名称：", "新法师角色");
       if (!name) return;
@@ -821,21 +816,18 @@
       applyStateToDOM();
     });
 
-    // 切换自动计算
     document.getElementById("btnToggleAutoCalc")?.addEventListener("click", () => {
       state.autoCalc = !state.autoCalc;
       saveToStorage();
       applyStateToDOM();
     });
 
-    // 切换中英双语 / 纯中文
     document.getElementById("btnToggleLang")?.addEventListener("click", () => {
       state.bilingual = !state.bilingual;
       saveToStorage();
       applyStateToDOM();
     });
 
-    // 展开/收起 5x10 秘艺施法速查矩阵
     document.getElementById("btnToggleMatrix")?.addEventListener("click", () => {
       const wrap = document.getElementById("castingMatrixWrap");
       if (!wrap) return;
@@ -843,7 +835,6 @@
       renderCastingMatrix();
     });
 
-    // 术语速查表开关与搜索
     const drawer = document.getElementById("glossaryDrawer");
     document.getElementById("btnOpenGlossary")?.addEventListener("click", () => {
       drawer?.classList.add("open");
@@ -858,7 +849,6 @@
     document.getElementById("glossarySearchInput")?.addEventListener("input", renderGlossaryTable);
     document.getElementById("glossaryCatFilter")?.addEventListener("change", renderGlossaryTable);
 
-    // 导出 JSON
     document.getElementById("btnExportJson")?.addEventListener("click", () => {
       const data = getActiveData();
       const charName = (data.character_name || "ars-magica-character").replace(/\s+/g, "_");
@@ -871,7 +861,6 @@
       URL.revokeObjectURL(url);
     });
 
-    // 导入 JSON
     document.getElementById("inputImportJson")?.addEventListener("change", (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
@@ -895,12 +884,10 @@
       e.target.value = "";
     });
 
-    // 打印 / 导出 PDF
     document.getElementById("btnPrint")?.addEventListener("click", () => {
       window.print();
     });
 
-    // 清空当前角色卡
     document.getElementById("btnReset")?.addEventListener("click", () => {
       if (!confirm("确定要清空当前角色卡的所有填写内容吗？")) return;
       state.slots[state.activeSlotId].data = {};
@@ -909,7 +896,6 @@
     });
   }
 
-  // 启动初始化
   document.addEventListener("DOMContentLoaded", () => {
     buildSheetDOM();
     populateDatalists();

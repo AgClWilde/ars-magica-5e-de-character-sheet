@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -16,19 +16,43 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Configure Pages
+
+      - name: Stage static site files
+        run: |
+          mkdir -p _site
+          cp index.html styles.css app.js glossary-data.js README.md _site/
+          touch _site/.nojekyll
+
+      - name: Publish to gh-pages branch (for branch-based Pages deployment)
+        run: |
+          cd _site
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "deploy: update GitHub Pages static site"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+
+      - name: Configure Pages (for Actions-based Pages deployment)
+        id: configure
         uses: actions/configure-pages@v5
-      - name: Upload artifact
+        continue-on-error: true
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        if: steps.configure.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
+
       - name: Deploy to GitHub Pages
+        if: steps.configure.outcome == 'success'
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
