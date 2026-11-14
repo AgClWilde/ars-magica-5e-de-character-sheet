@@ -9,6 +9,7 @@
   let state = {
     activeSlotId: "default",
     autoCalc: true,
+    autoFill: true,
     bilingual: false,
     slots: {
       default: {
@@ -78,7 +79,7 @@
       );
       flawsList.insertAdjacentHTML(
         "beforeend",
-        `<input type="text" data-field="flaw_${i}" list="datalist-virtues" />`
+        `<input type="text" data-field="flaw_${i}" list="datalist-flaws" />`
       );
     }
 
@@ -131,7 +132,7 @@
       );
     }
 
-    // 1.6 Page 2: 伤势复选框 (轻/中/重各5格，与休克/死亡第1格垂直对齐)
+    // 1.6 Page 2: 伤势复选框 (轻/中/重各5格，与失能/死亡第1格垂直对齐)
     const lightChecks = document.getElementById("woundLightChecks");
     const mediumChecks = document.getElementById("woundMediumChecks");
     const heavyChecks = document.getElementById("woundHeavyChecks");
@@ -156,7 +157,7 @@
       weaponsBody.insertAdjacentHTML(
         "beforeend",
         `<tr>
-          <td><input type="text" data-field="wp_${i}_name" placeholder="武器 ${i}" /></td>
+          <td><input type="text" data-field="wp_${i}_name" list="datalist-weapons" placeholder="武器 ${i}" /><input type="text" data-field="wp_${i}_ability" list="datalist-abilities" placeholder="战斗能力" title="填写所用能力；未指定时可手填攻防能力值" /></td>
           <td style="text-align:center;">
             <div class="formula-group">
               <input type="number" data-field="wp_${i}_init_qik" placeholder="Qik" />
@@ -199,7 +200,7 @@
               <input type="number" data-field="wp_${i}_dam_total" class="calc-output" readonly />
             </div>
           </td>
-          <td><input type="number" data-field="wp_${i}_load" /></td>
+          <td><input type="number" data-field="wp_${i}_load" min="0" /><label class="carried-label"><input type="checkbox" data-field="wp_${i}_carried" />携带</label></td>
           <td><input type="text" data-field="wp_${i}_range" style="text-align:center;" /></td>
         </tr>`
       );
@@ -296,8 +297,8 @@
               <input type="number" data-field="spell_${i}_level" />
             </div>
             <div class="field-row">
-              <label class="field-label">加值<span class="en-sub">Bonus</span>:</label>
-              <input type="text" data-field="spell_${i}_bonus" placeholder="自动或手动" />
+              <label class="field-label">施法加值<span class="en-sub">Bonus</span>:</label>
+              <input type="text" class="calc-output" data-field="spell_${i}_bonus" title="含先决条件、耐力、负荷、施法辉环及精通；仪式另加自由七艺与哲学。不含骰值、伤势及疲劳惩罚。" />
             </div>
           </div>
           <div class="spell-row-3col">
@@ -324,6 +325,11 @@
               <input type="text" data-field="spell_${i}_mastery" />
             </div>
           </div>
+          <div class="field-row spell-requisites-row">
+            <label class="field-label">先决条件:</label>
+            <input type="text" data-field="spell_${i}_requisites" placeholder="秘艺名，以顿号分隔" />
+            <label class="ritual-label"><input type="checkbox" data-field="spell_${i}_ritual" />仪式</label>
+          </div>
           <div class="field-row">
             <label class="field-label">备注<span class="en-sub">Notes</span>:</label>
             <input type="text" data-field="spell_${i}_notes_1" />
@@ -334,568 +340,510 @@
           <div class="field-row" style="margin-bottom:0;">
             <input type="text" data-field="spell_${i}_notes_3" />
           </div>
+          <details class="spell-reference no-print" id="spellReference${i}"><summary>规则与出处</summary><div></div></details>
         </div>`
       );
     }
   }
 
-  // ==========================================================================
-  // 2. 填充自动补全 Datalists 与术语速查表
-  // ==========================================================================
-  function populateDatalists() {
-    const dlHouses = document.getElementById("datalist-houses");
-    window.ARS_GLOSSARY.houses.forEach((h) => {
-      dlHouses.insertAdjacentHTML("beforeend", `<option value="${h.cn}"></option>`);
-    });
+  // 术语名称采用精确匹配；英文缩写和旧译名只作检索别名。
+  const G = window.ARS_GLOSSARY;
+  const R = window.ARS_RULES;
+  const FATIGUE = ["fresh", "winded", "weary", "tired", "dazed", "unconscious"];
+  const fieldElement = (name) => document.querySelector(`[data-field="${name}"]`);
+  const getVal = (name) => fieldElement(name)?.value ?? "";
+  const getNum = (name) => Number.isFinite(Number(getVal(name))) ? Number(getVal(name)) : 0;
+  const checked = (name) => !!fieldElement(name)?.checked;
+  const signed = (n) => n >= 0 ? `+${n}` : String(n);
+  const normalize = (s) => String(s || "").normalize("NFKC").toLowerCase().replace(/[\s·’'’*]/g, "");
+  const arts = () => [...G.techniques, ...G.forms];
 
-    const dlAbilities = document.getElementById("datalist-abilities");
-    window.ARS_GLOSSARY.abilities.forEach((a) => {
-      dlAbilities.insertAdjacentHTML(
-        "beforeend",
-        `<option value="${a.cn} (${a.en})"></option>`
-      );
+  function matches(value, item) {
+    const names = [item.cn, item.en, item.abbr, item.key, ...(item.aliases || [])].filter(Boolean);
+    [item.cn, ...(item.aliases || [])].forEach((name) => {
+      if (item.en) names.push(`${name} (${item.en})`);
+      if (item.abbr) names.push(`${name} (${item.abbr})`);
     });
-
-    const dlVirtues = document.getElementById("datalist-virtues");
-    window.ARS_GLOSSARY.entries
-      .filter((e) => e.cat === "优势与劣势")
-      .forEach((v) => {
-        dlVirtues.insertAdjacentHTML(
-          "beforeend",
-          `<option value="${v.cn} (${v.en})"></option>`
-        );
-      });
-
-    const dlTechs = document.getElementById("datalist-techniques");
-    const dlForms = document.getElementById("datalist-forms");
-    const dlArts = document.getElementById("datalist-arts");
-    window.ARS_GLOSSARY.techniques.forEach((t) => {
-      dlTechs.insertAdjacentHTML("beforeend", `<option value="${t.cn} (${t.en})"></option>`);
-      dlArts.insertAdjacentHTML("beforeend", `<option value="${t.cn} (${t.abbr})"></option>`);
-    });
-    window.ARS_GLOSSARY.forms.forEach((f) => {
-      dlForms.insertAdjacentHTML("beforeend", `<option value="${f.cn} (${f.en})"></option>`);
-      dlArts.insertAdjacentHTML("beforeend", `<option value="${f.cn} (${f.abbr})"></option>`);
-    });
-
-    const dlSpells = document.getElementById("datalist-spells");
-    window.ARS_GLOSSARY.entries
-      .filter((e) => e.cat === "法术")
-      .forEach((s) => {
-        dlSpells.insertAdjacentHTML(
-          "beforeend",
-          `<option value="${s.cn} (${s.en})"></option>`
-        );
-      });
-
-    const dlRanges = document.getElementById("datalist-ranges");
-    window.ARS_GLOSSARY.spellParams.ranges.forEach((r) => {
-      dlRanges.insertAdjacentHTML("beforeend", `<option value="${r}"></option>`);
-    });
-
-    const dlDurations = document.getElementById("datalist-durations");
-    window.ARS_GLOSSARY.spellParams.durations.forEach((d) => {
-      dlDurations.insertAdjacentHTML("beforeend", `<option value="${d}"></option>`);
-    });
-
-    const dlTargets = document.getElementById("datalist-targets");
-    window.ARS_GLOSSARY.spellParams.targets.forEach((t) => {
-      dlTargets.insertAdjacentHTML("beforeend", `<option value="${t}"></option>`);
-    });
+    return names.some((name) => normalize(name) === normalize(value));
   }
-
-  // ==========================================================================
-  // 3. 辅助读取与自动计算引擎
-  // ==========================================================================
-  function getNum(field) {
-    const el = document.querySelector(`[data-field="${field}"]`);
-    if (!el || el.value === "") return 0;
-    const n = parseFloat(el.value);
-    return isNaN(n) ? 0 : n;
+  function matchEntry(value, list) {
+    if (!String(value || "").trim()) return null;
+    const candidates = list.filter((item) => matches(value, item));
+    return candidates.length === 1 ? candidates[0] : null;
   }
-
-  function setValIfAuto(field, val) {
-    const el = document.querySelector(`[data-field="${field}"]`);
+  function setVal(field, value) {
+    const el = fieldElement(field);
     if (!el) return;
-    el.value = val;
-    getActiveData()[field] = val;
+    if (el.type === "checkbox") el.checked = Boolean(value);
+    else el.value = value ?? "";
+    getActiveData()[field] = el.type === "checkbox" ? el.checked : el.value;
   }
-
-  // 从第1页的30行能力列表中查找特定能力的数值
-  function findAbilityScore(keywords) {
+  function fillManaged(field, value, force = false) {
+    const data = getActiveData();
+    const previous = data.__autoFilled || (data.__autoFilled = {});
+    const el = fieldElement(field);
+    if (!el) return;
+    const current = el.type === "checkbox" ? el.checked : el.value;
+    if (force || current === "" || current === false || String(current) === String(previous[field])) {
+      setVal(field, value ?? "");
+      previous[field] = el.type === "checkbox" ? el.checked : el.value;
+    }
+  }
+  function clearManaged(fields) {
+    const previous = getActiveData().__autoFilled || {};
+    fields.forEach((field) => {
+      const el = fieldElement(field);
+      if (!el || !Object.hasOwn(previous, field)) return;
+      const current = el.type === "checkbox" ? el.checked : el.value;
+      if (String(current) === String(previous[field])) setVal(field, el.type === "checkbox" ? false : "");
+      delete previous[field];
+    });
+  }
+  function addOptions(id, items) {
+    const list = document.getElementById(id);
+    if (!list) return;
+    list.replaceChildren();
+    const values = new Set();
+    items.forEach((item) => {
+      const value = typeof item === "string" ? item : item.cn;
+      if (!value || values.has(value)) return;
+      values.add(value);
+      const option = document.createElement("option");
+      option.value = value;
+      if (typeof item === "object") option.label = [item.en, item.kind].filter(Boolean).join(" · ");
+      list.append(option);
+    });
+  }
+  function populateDatalists() {
+    const lists = {
+      houses: G.houses, abilities: G.abilities, virtues: G.virtues, flaws: G.flaws,
+      techniques: G.techniques, forms: G.forms, arts: arts(), spells: G.spells,
+      weapons: G.weapons, armors: G.armors,
+      ranges: G.spellParams.ranges, durations: G.spellParams.durations, targets: G.spellParams.targets
+    };
+    Object.entries(lists).forEach(([name, items]) => addOptions(`datalist-${name}`, items || []));
+    const filter = document.getElementById("glossaryCatFilter");
+    filter.replaceChildren(new Option("全部分类", "ALL"));
+    [...new Set(G.entries.map((item) => item.cat))].forEach((category) => filter.add(new Option(category, category)));
+  }
+  function findAbilityScore(en) {
+    const ability = G.abilities.find((a) => normalize(a.en) === normalize(en));
+    if (!ability) return 0;
+    const scores = [];
     for (let i = 1; i <= 30; i++) {
-      const nameEl = document.querySelector(`[data-field="ab_${i}_name"]`);
-      const scoreEl = document.querySelector(`[data-field="ab_${i}_score"]`);
-      if (!nameEl || !nameEl.value) continue;
-      const text = nameEl.value.toLowerCase();
-      if (keywords.some((kw) => text.includes(kw.toLowerCase()))) {
-        const val = parseFloat(scoreEl.value);
-        return isNaN(val) ? 0 : val;
-      }
+      if (matches(getVal(`ab_${i}_name`), ability)) scores.push(getNum(`ab_${i}_score`));
     }
-    return null;
+    return scores.length ? Math.max(...scores) : 0;
   }
-
-  // 匹配技法或型式名称对应的秘艺分值
-  function matchArtScore(inputStr, list) {
-    if (!inputStr) return null;
-    const clean = inputStr.trim().toLowerCase();
-    for (const item of list) {
-      if (
-        clean.includes(item.cn) ||
-        clean.includes(item.en.toLowerCase()) ||
-        clean === item.abbr.toLowerCase()
-      ) {
-        return getNum(`art_${item.key}_score`);
-      }
-    }
-    return null;
+  function artScore(value, list = arts()) {
+    const art = matchEntry(value, list);
+    return art ? getNum(`art_${art.key}_score`) : null;
   }
-
-  function runAutoCalculations(changedField) {
-    if (!state.autoCalc) {
-      renderCastingMatrix();
-      return;
+  function refreshSpellReference(i) {
+    const spell = matchEntry(getVal(`spell_${i}_name`), G.spells || []);
+    const container = document.getElementById(`spellReference${i}`);
+    if (!container) return;
+    container.hidden = !spell;
+    if (spell) {
+      container.querySelector("div").textContent = [spell.description, spell.notes, spell.src].filter(Boolean).join("\n\n");
+      const name = fieldElement(`spell_${i}_name`);
+      name.title = spell.src || "";
     }
-
-    // 3.1 同步 P1 与 P3 的学派，并自动带出宗庭与首席（若为空）
+  }
+  function runAutoFill(changedField) {
     if (changedField === "house" || changedField === "p3_house") {
-      const srcVal = document.querySelector(`[data-field="${changedField}"]`).value;
-      const otherField = changedField === "house" ? "p3_house" : "house";
-      setValIfAuto(otherField, srcVal);
-
-      const matchedHouse = window.ARS_GLOSSARY.houses.find(
-        (h) => srcVal.includes(h.cn.split(" ")[0]) || srcVal.toLowerCase().includes(h.en.toLowerCase())
-      );
-      if (matchedHouse) {
-        const domusEl = document.querySelector(`[data-field="domus_magna"]`);
-        const primusEl = document.querySelector(`[data-field="primus"]`);
-        if (domusEl && !domusEl.value) setValIfAuto("domus_magna", matchedHouse.domus);
-        if (primusEl && !primusEl.value) setValIfAuto("primus", matchedHouse.primus);
-      }
+      setVal(changedField === "house" ? "p3_house" : "house", getVal(changedField));
     }
-
-    // 3.2 根据体型 (Size) 自动计算伤势范围 (Wound Ranges)
-    const size = getNum("size");
-    const step = Math.max(1, 5 + size);
-    setValIfAuto("wound_light_range", `1–${step}`);
-    setValIfAuto("wound_medium_range", `${step + 1}–${step * 2}`);
-    setValIfAuto("wound_heavy_range", `${step * 2 + 1}–${step * 3}`);
-    setValIfAuto("wound_incap_range", `${step * 3 + 1}–${step * 4}`);
-    setValIfAuto("wound_dead_range", `${step * 4 + 1}+`);
-
-    // 3.3 读取八大属性
-    const intScore = getNum("char_int_score");
-    const perScore = getNum("char_per_score");
-    const strScore = getNum("char_str_score");
-    const staScore = getNum("char_sta_score");
-    const dexScore = getNum("char_dex_score");
-    const qikScore = getNum("char_qik_score");
-
-    // 3.4 同步能力列表中的精密、察觉、专注、绛咒、魔法理论到第3页
-    const finesseFromAb = findAbilityScore(["精密", "finesse"]);
-    const awareFromAb = findAbilityScore(["察觉", "awareness"]);
-    const concFromAb = findAbilityScore(["专注", "concentration"]);
-    const parmaFromAb = findAbilityScore(["绛咒", "parma"]);
-    const theoryFromAb = findAbilityScore(["魔法理论", "magic theory"]);
-
-    setValIfAuto("fc_qik", qikScore);
-    if (finesseFromAb !== null) {
-      setValIfAuto("fc_finesse", finesseFromAb);
-      setValIfAuto("bt_finesse", finesseFromAb);
+    if (!state.autoFill) return;
+    if (changedField === "house" || changedField === "p3_house") {
+      const house = matchEntry(getVal(changedField), G.houses);
+      if (house) {
+        fillManaged("domus_magna", house.domus || "");
+        fillManaged("primus", house.primus || "");
+      } else clearManaged(["domus_magna", "primus"]);
     }
-    setValIfAuto("fc_total", getNum("fc_qik") + getNum("fc_finesse"));
-
-    setValIfAuto("de_per", perScore);
-    if (awareFromAb !== null) setValIfAuto("de_awareness", awareFromAb);
-    setValIfAuto("de_total", getNum("de_per") + getNum("de_awareness"));
-
-    setValIfAuto("bt_per", perScore);
-    setValIfAuto("bt_total", getNum("bt_per") + getNum("bt_finesse"));
-
-    setValIfAuto("conc_sta", staScore);
-    if (concFromAb !== null) setValIfAuto("conc_skill", concFromAb);
-    setValIfAuto("conc_total", getNum("conc_sta") + getNum("conc_skill"));
-
-    if (parmaFromAb !== null) setValIfAuto("mr_parma", parmaFromAb);
-    setValIfAuto("mr_total", getNum("mr_parma") * 5);
-
-    // 3.5 基础工坊总值 (Int + Magic Theory + Aura)
-    setValIfAuto("lab_int", intScore);
-    if (theoryFromAb !== null) setValIfAuto("lab_theory", theoryFromAb);
-    const aura = getNum("lab_aura");
-    setValIfAuto("lab_total", getNum("lab_int") + getNum("lab_theory") + aura);
-
-    // 3.6 长寿仪式衰老修正建议 (每5点工坊总值 -1)
-    const longLab = getNum("longevity_lab_total");
-    if (longLab > 0) {
-      setValIfAuto("longevity_age_mod", `-${Math.ceil(longLab / 5)}`);
+    const spellMatch = /^spell_(\d+)_name$/.exec(changedField || "");
+    if (spellMatch) {
+      const i = spellMatch[1];
+      const spell = matchEntry(getVal(changedField), G.spells || []);
+      const fields = ["tech", "form", "level", "range", "duration", "target", "requisites", "ritual"].map((k) => `spell_${i}_${k}`);
+      if (spell) {
+        const artName = (key) => arts().find((a) => a.key === key)?.cn || key;
+        const values = {
+          tech: artName(spell.tech), form: artName(spell.form), level: spell.level ?? "",
+          range: spell.range, duration: spell.duration, target: spell.target,
+          requisites: (spell.requisites || []).map(artName).join("、"), ritual: !!spell.ritual
+        };
+        Object.entries(values).forEach(([k, value]) => fillManaged(`spell_${i}_${k}`, value, true));
+        fieldElement(`spell_${i}_level`).placeholder = spell.general ? "通用：自定等级" : "";
+      } else clearManaged(fields);
+      refreshSpellReference(i);
     }
-
-    // 3.7 武器行公式计算 (6行)
-    for (let i = 1; i <= 6; i++) {
-      const wpName = document.querySelector(`[data-field="wp_${i}_name"]`)?.value;
-      if (wpName) {
-        const initQikEl = document.querySelector(`[data-field="wp_${i}_init_qik"]`);
-        const atkDexEl = document.querySelector(`[data-field="wp_${i}_atk_dex"]`);
-        const dfnQikEl = document.querySelector(`[data-field="wp_${i}_dfn_qik"]`);
-        const damStrEl = document.querySelector(`[data-field="wp_${i}_dam_str"]`);
-        if (initQikEl && initQikEl.value === "") setValIfAuto(`wp_${i}_init_qik`, qikScore);
-        if (atkDexEl && atkDexEl.value === "") setValIfAuto(`wp_${i}_atk_dex`, dexScore);
-        if (dfnQikEl && dfnQikEl.value === "") setValIfAuto(`wp_${i}_dfn_qik`, qikScore);
-        if (damStrEl && damStrEl.value === "") setValIfAuto(`wp_${i}_dam_str`, strScore);
-      }
-
-      const hasInit =
-        document.querySelector(`[data-field="wp_${i}_init_qik"]`)?.value !== "" ||
-        document.querySelector(`[data-field="wp_${i}_init_weap"]`)?.value !== "";
-      if (hasInit) {
-        setValIfAuto(
-          `wp_${i}_init_total`,
-          getNum(`wp_${i}_init_qik`) + getNum(`wp_${i}_init_weap`) - getNum(`wp_${i}_init_enc`)
-        );
-      } else {
-        setValIfAuto(`wp_${i}_init_total`, "");
-      }
-
-      const hasAtk =
-        document.querySelector(`[data-field="wp_${i}_atk_dex"]`)?.value !== "" ||
-        document.querySelector(`[data-field="wp_${i}_atk_ab"]`)?.value !== "" ||
-        document.querySelector(`[data-field="wp_${i}_atk_weap"]`)?.value !== "";
-      if (hasAtk) {
-        setValIfAuto(
-          `wp_${i}_atk_total`,
-          getNum(`wp_${i}_atk_dex`) + getNum(`wp_${i}_atk_ab`) + getNum(`wp_${i}_atk_weap`)
-        );
-      } else {
-        setValIfAuto(`wp_${i}_atk_total`, "");
-      }
-
-      const hasDfn =
-        document.querySelector(`[data-field="wp_${i}_dfn_qik"]`)?.value !== "" ||
-        document.querySelector(`[data-field="wp_${i}_dfn_ab"]`)?.value !== "" ||
-        document.querySelector(`[data-field="wp_${i}_dfn_weap"]`)?.value !== "";
-      if (hasDfn) {
-        setValIfAuto(
-          `wp_${i}_dfn_total`,
-          getNum(`wp_${i}_dfn_qik`) + getNum(`wp_${i}_dfn_ab`) + getNum(`wp_${i}_dfn_weap`)
-        );
-      } else {
-        setValIfAuto(`wp_${i}_dfn_total`, "");
-      }
-
-      const hasDam =
-        document.querySelector(`[data-field="wp_${i}_dam_str"]`)?.value !== "" ||
-        document.querySelector(`[data-field="wp_${i}_dam_weap"]`)?.value !== "";
-      if (hasDam) {
-        setValIfAuto(
-          `wp_${i}_dam_total`,
-          getNum(`wp_${i}_dam_str`) + getNum(`wp_${i}_dam_weap`)
-        );
-      } else {
-        setValIfAuto(`wp_${i}_dam_total`, "");
-      }
+    const weaponMatch = /^wp_(\d+)_name$/.exec(changedField || "");
+    if (weaponMatch) {
+      const i = weaponMatch[1];
+      const weapon = matchEntry(getVal(changedField), G.weapons || []);
+      const mapping = { init_weap: "init", atk_weap: "atk", dfn_weap: "dfn", dam_weap: "dam", load: "load", range: "range", ability: "ability" };
+      if (weapon) {
+        Object.entries(mapping).forEach(([field, key]) => {
+          let value = weapon[key];
+          if (key === "ability") value = G.abilities.find((a) => normalize(a.en) === normalize(value))?.cn || value;
+          fillManaged(`wp_${i}_${field}`, value ?? "", true);
+        });
+        fillManaged(`wp_${i}_carried`, true, true);
+      } else clearManaged(Object.keys(mapping).map((key) => `wp_${i}_${key}`).concat(`wp_${i}_carried`));
     }
-
-    // 3.8 Page 4: 法术施法加值自动计算 (技法 + 型式 + 耐力 + 辉环 + 精通等级)
-    for (let i = 1; i <= 12; i++) {
-      const formStr = document.querySelector(`[data-field="spell_${i}_form"]`)?.value || "";
-      const techStr = document.querySelector(`[data-field="spell_${i}_tech"]`)?.value || "";
-      const masteryStr = document.querySelector(`[data-field="spell_${i}_mastery"]`)?.value || "";
-      const fScore = matchArtScore(formStr, window.ARS_GLOSSARY.forms);
-      const tScore = matchArtScore(techStr, window.ARS_GLOSSARY.techniques);
-      if (fScore !== null && tScore !== null) {
-        const masteryMatch = masteryStr.match(/\d+/);
-        const mScore = masteryMatch ? parseInt(masteryMatch[0], 10) : 0;
-        const totalBonus = tScore + fScore + staScore + aura + mScore;
-        setValIfAuto(`spell_${i}_bonus`, `+${totalBonus}`);
-      }
+    if (changedField === "armor_worn_1") {
+      const armor = matchEntry(getVal(changedField), G.armors || []);
+      if (armor) {
+        fillManaged("armor_protection", armor.protection, true);
+        fillManaged("armor_load", armor.load, true);
+      } else clearManaged(["armor_protection", "armor_load"]);
     }
-
-    renderCastingMatrix();
   }
-
-  // 渲染 5×10 技法×型式 施法总值矩阵
+  function condition() {
+    const counts = {light: 0, medium: 0, heavy: 0};
+    Object.keys(counts).forEach((kind) => {
+      for (let i = 1; i <= 5; i++) counts[kind] += checked(`wound_${kind}_${i}`) ? 1 : 0;
+    });
+    let level = 0;
+    FATIGUE.forEach((name, index) => { if (checked(`fatigue_${name}`)) level = index; });
+    const blocked = checked("wound_dead_1") ? "死亡" : checked("wound_incap_1") ? "失能" : level === 5 ? "昏迷" : "";
+    return { wound: R.woundPenalty(counts), fatigue: R.fatiguePenalty(level), blocked };
+  }
+  function equipment() {
+    let load = Math.max(0, getNum("armor_load")) + Math.max(0, getNum("equipment_load"));
+    for (let i = 1; i <= 6; i++) if (checked(`wp_${i}_carried`)) load += Math.max(0, getNum(`wp_${i}_load`));
+    return {load, burden: R.burden(load), encumbrance: R.encumbrance(load, getNum("char_str_score"))};
+  }
+  function convertExperience() {
+    if (!checked("xp_cumulative")) return;
+    const convert = (exp, score, kind) => {
+      const value = getVal(exp).trim();
+      if (/^\d+$/.test(value)) {
+        const result = R.advancement(Number(value), kind);
+        if (!result) { clearManaged([score]); return; }
+        fillManaged(score, result.score, true);
+        fieldElement(exp).title = `累计经验 ${value}；本级进度 ${result.progress}；下一级需要 ${result.nextCost}`;
+      } else { clearManaged([score]); fieldElement(exp).title = "累计经验必须是非负整数；留空后等级可手填。"; }
+    };
+    for (let i = 1; i <= 30; i++) convert(`ab_${i}_exp`, `ab_${i}_score`, "ability");
+    arts().forEach((art) => convert(`art_${art.key}_exp`, `art_${art.key}_score`, "art"));
+    for (let i = 1; i <= 12; i++) convert(`spell_${i}_exp`, `spell_${i}_mastery`, "ability");
+  }
+  function spellScore(i) {
+    const technique = artScore(getVal(`spell_${i}_tech`), G.techniques);
+    const form = artScore(getVal(`spell_${i}_form`), G.forms);
+    if (technique === null || form === null) return null;
+    const reqs = getVal(`spell_${i}_requisites`).trim();
+    const techniqueRequisites = [], formRequisites = [];
+    if (reqs) {
+      for (const name of reqs.split(/[、,，;/；]+/).map((s) => s.trim()).filter(Boolean)) {
+        const tech = matchEntry(name, G.techniques), f = matchEntry(name, G.forms);
+        if (!tech && !f) return null;
+        (tech ? techniqueRequisites : formRequisites).push(getNum(`art_${(tech || f).key}_score`));
+      }
+    }
+    const masteryMatch = getVal(`spell_${i}_mastery`).match(/^\s*(\d+)/);
+    const score = R.castingScore({technique, form, techniqueRequisites, formRequisites,
+      stamina: getNum("char_sta_score"), aura: getNum("casting_aura"), encumbrance: equipment().encumbrance,
+      mastery: masteryMatch ? Number(masteryMatch[1]) : 0});
+    return checked(`spell_${i}_ritual`) ? R.castingTotal({score, mode: "ritual", artesLiberales: findAbilityScore("Artes Liberales"), philosophiae: findAbilityScore("Philosophiae")}) : score;
+  }
+  function runAutoCalculations() {
+    if (!state.autoCalc) { renderCastingMatrix(); renderRuleSummary(); return; }
+    convertExperience();
+    const ranges = R.woundRanges(getNum("size"));
+    ["light", "medium", "heavy", "incap", "dead"].forEach((kind) => {
+      const range = ranges[kind === "incap" ? "incapacitated" : kind];
+      setVal(`wound_${kind}_range`, Array.isArray(range) ? `${range[0]}${range[1] === Infinity ? "+" : `–${range[1]}`}` : range);
+    });
+    const mappings = {
+      fc_qik: getNum("char_qik_score"), fc_finesse: findAbilityScore("Finesse"),
+      de_per: getNum("char_per_score"), de_awareness: findAbilityScore("Awareness"),
+      bt_per: getNum("char_per_score"), bt_finesse: findAbilityScore("Finesse"),
+      conc_sta: getNum("char_sta_score"), conc_skill: findAbilityScore("Concentration"),
+      mr_parma: findAbilityScore("Parma Magica"), lab_int: getNum("char_int_score"), lab_theory: findAbilityScore("Magic Theory")
+    };
+    Object.entries(mappings).forEach(([name, value]) => setVal(name, value));
+    setVal("fc_total", getNum("fc_qik") + getNum("fc_finesse"));
+    setVal("de_total", getNum("de_per") + getNum("de_awareness"));
+    setVal("bt_total", getNum("bt_per") + getNum("bt_finesse"));
+    setVal("conc_total", getNum("conc_sta") + getNum("conc_skill"));
+    setVal("mr_total", getNum("mr_parma") * 5);
+    setVal("lab_total", R.labTotal({intelligence: getNum("lab_int"), magicTheory: getNum("lab_theory"), aura: getNum("lab_aura")}));
+    setVal("longevity_age_mod", getVal("longevity_lab_total") === "" ? "" : R.longevityModifier(getNum("longevity_lab_total"), checked("longevity_mundane")));
+    const eq = equipment();
+    if (getVal("armor_protection") !== "" || getVal("soak_bonus") !== "") {
+      fillManaged("soak", getNum("char_sta_score") + getNum("armor_protection") + getNum("soak_bonus"), true);
+    } else clearManaged(["soak"]);
+    for (let i = 1; i <= 6; i++) {
+      const active = getVal(`wp_${i}_name`).trim() !== "";
+      const attrs = { init_qik: "qik", atk_dex: "dex", dfn_qik: "qik", dam_str: "str" };
+      if (active) {
+        Object.entries(attrs).forEach(([field, attr]) => setVal(`wp_${i}_${field}`, getNum(`char_${attr}_score`)));
+        setVal(`wp_${i}_init_enc`, eq.encumbrance);
+      } else {
+        Object.keys(attrs).forEach((field) => setVal(`wp_${i}_${field}`, ""));
+        setVal(`wp_${i}_init_enc`, "");
+      }
+      const ability = matchEntry(getVal(`wp_${i}_ability`), G.abilities);
+      ["atk_ab", "dfn_ab"].forEach((field) => { fieldElement(`wp_${i}_${field}`).readOnly = !!ability; });
+      if (ability) {
+        fillManaged(`wp_${i}_atk_ab`, findAbilityScore(ability.en), true);
+        fillManaged(`wp_${i}_dfn_ab`, findAbilityScore(ability.en), true);
+      } else clearManaged([`wp_${i}_atk_ab`, `wp_${i}_dfn_ab`]);
+      const weapon = matchEntry(getVal(`wp_${i}_name`), G.weapons || []);
+      const shield = weapon?.type === "shield";
+      if (weapon) fieldElement(`wp_${i}_name`).title = [weapon.notes, weapon.str === null ? "" : `最低力量 ${weapon.str}${getNum("char_str_score") < weapon.str ? "（尚未满足）" : ""}`, weapon.src].filter(Boolean).join("\n");
+      if (active) {
+        setVal(`wp_${i}_init_total`, shield ? "" : getNum(`wp_${i}_init_qik`) + getNum(`wp_${i}_init_weap`) - eq.encumbrance);
+        setVal(`wp_${i}_atk_total`, shield || weapon?.atk === null ? "" : getNum(`wp_${i}_atk_dex`) + getNum(`wp_${i}_atk_ab`) + getNum(`wp_${i}_atk_weap`));
+        setVal(`wp_${i}_dfn_total`, shield ? "" : getNum(`wp_${i}_dfn_qik`) + getNum(`wp_${i}_dfn_ab`) + getNum(`wp_${i}_dfn_weap`));
+        setVal(`wp_${i}_dam_total`, shield || weapon?.dam === null ? "" : getNum(`wp_${i}_dam_str`) + getNum(`wp_${i}_dam_weap`));
+      } else ["init", "atk", "dfn", "dam"].forEach((kind) => setVal(`wp_${i}_${kind}_total`, ""));
+    }
+    for (let i = 1; i <= 12; i++) {
+      const score = spellScore(i);
+      setVal(`spell_${i}_bonus`, score === null ? "" : signed(score));
+      fieldElement(`spell_${i}_bonus`).title = score === null ? "需填写明确的技法、型式与先决条件才能计算。" : "含先决条件、精通、负荷、施法辉环；仪式含自由七艺与哲学。不含骰、伤势与疲劳。";
+    }
+    renderCastingMatrix();
+    renderRuleSummary();
+  }
+  function renderRuleSummary() {
+    const eq = equipment(), status = condition();
+    const out = document.getElementById("ruleSummary");
+    const penalty = status.blocked || signed(status.wound + (status.fatigue || 0));
+    out.textContent = `总负重 ${eq.load} → 负载 ${eq.burden} → 负荷 ${eq.encumbrance}；伤势 ${signed(status.wound)}；疲劳 ${status.fatigue === null ? "昏迷" : signed(status.fatigue)}；行动修正：${penalty}。`;
+    const form = artScore(getVal("resistance_form"), G.forms);
+    document.getElementById("resistanceResult").textContent = form === null ? "选择型式后显示抗性" : String(R.magicResistance({parma: findAbilityScore("Parma Magica"), form, aura: getNum("casting_aura")}));
+  }
   function renderCastingMatrix() {
     const table = document.getElementById("castingMatrixTable");
     if (!table) return;
-    const sta = getNum("char_sta_score");
-    const aura = getNum("lab_aura");
-
-    let html = `<thead><tr><th>技法 \\ 型式</th>`;
-    window.ARS_GLOSSARY.forms.forEach((f) => {
-      html += `<th>${f.cn}<br/><span style="font-weight:normal;font-size:10px;">${f.abbr}</span></th>`;
-    });
-    html += `</tr></thead><tbody>`;
-
-    window.ARS_GLOSSARY.techniques.forEach((t) => {
-      const tScore = getNum(`art_${t.key}_score`);
-      html += `<tr><th>${t.cn} (${t.abbr})</th>`;
-      window.ARS_GLOSSARY.forms.forEach((f) => {
-        const fScore = getNum(`art_${f.key}_score`);
-        const formulaic = tScore + fScore + sta + aura;
-        const spontNoFat = Math.floor(formulaic / 5);
-        html += `<td><strong>+${formulaic}</strong> <span style="color:var(--ink-muted);font-size:10px;">(${spontNoFat})</span></td>`;
+    table.replaceChildren();
+    const header = table.createTHead().insertRow();
+    header.appendChild(document.createElement("th")).textContent = "技法 / 型式";
+    G.forms.forEach((form) => { header.appendChild(document.createElement("th")).textContent = `${form.cn} (${form.abbr})`; });
+    const body = table.createTBody(), status = condition();
+    G.techniques.forEach((tech) => {
+      const row = body.insertRow();
+      row.appendChild(document.createElement("th")).textContent = `${tech.cn} (${tech.abbr})`;
+      G.forms.forEach((form) => {
+        const score = R.castingScore({technique: getNum(`art_${tech.key}_score`), form: getNum(`art_${form.key}_score`),
+          stamina: getNum("char_sta_score"), aura: getNum("casting_aura"), encumbrance: equipment().encumbrance});
+        const cell = row.insertCell();
+        const adjusted = score + status.wound + (status.fatigue || 0);
+        cell.textContent = `${signed(score)} (${R.castingTotal({score, mode: "nonfatiguing"})})`;
+        cell.title = status.blocked ? `当前状态：${status.blocked}，不能正常施法。` : `计入伤疲：${signed(adjusted)}；无疲劳即兴：${R.castingTotal({score: adjusted, mode: "nonfatiguing"})}。疲劳即兴另加压力骰后除以 2。`;
       });
-      html += `</tr>`;
     });
-    html += `</tbody>`;
-    table.innerHTML = html;
   }
 
-  // ==========================================================================
-  // 4. 状态管理、多角色槽位与 LocalStorage 持久化
-  // ==========================================================================
-  function getActiveData() {
-    if (!state.slots[state.activeSlotId]) {
-      state.slots[state.activeSlotId] = { name: "默认角色", data: {} };
+  // 存档沿用 v1 键与原字段名，旧角色无需重新填写。
+  function getActiveData() { return state.slots[state.activeSlotId].data; }
+  function isRecord(value) { return !!value && typeof value === "object" && !Array.isArray(value); }
+  function cleanData(value) {
+    if (!isRecord(value)) throw new Error("角色数据必须是对象。");
+    const result = {};
+    let count = 0;
+    document.querySelectorAll("[data-field]").forEach((el) => {
+      const field = el.dataset.field;
+      if (!Object.hasOwn(value, field)) return;
+      const entry = value[field];
+      if (el.type === "checkbox") {
+        if (typeof entry !== "boolean" && entry !== 0 && entry !== 1) throw new Error(`勾选项 ${field} 格式不正确。`);
+        result[field] = !!entry;
+      } else {
+        if (entry !== null && !["string", "number"].includes(typeof entry)) throw new Error(`填写项 ${field} 必须是文字或数值。`);
+        result[field] = entry == null ? "" : String(entry);
+      }
+      count++;
+    });
+    if (Object.keys(value).length && !count) throw new Error("文件中没有可识别的角色卡字段。");
+    if (isRecord(value.__autoFilled)) {
+      result.__autoFilled = {};
+      Object.keys(result).forEach((field) => {
+        const entry = value.__autoFilled[field];
+        if (["string", "number", "boolean"].includes(typeof entry)) result.__autoFilled[field] = entry;
+      });
     }
-    return state.slots[state.activeSlotId].data;
+    return result;
   }
-
   function saveToStorage() {
     try {
-      const charName = getActiveData()["character_name"];
-      if (charName && charName.trim()) {
-        state.slots[state.activeSlotId].name = charName.trim();
-      }
+      const name = String(getActiveData().character_name || "").trim();
+      if (name) state.slots[state.activeSlotId].name = name;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateSlotSelector();
-      const statusEl = document.getElementById("saveStatus");
-      if (statusEl) {
-        const now = new Date();
-        statusEl.textContent = `已保存 (${now.toTimeString().slice(0, 8)})`;
-      }
-    } catch (e) {
-      console.error("Failed to save character sheet:", e);
+      document.getElementById("saveStatus").textContent = `已保存（${new Date().toLocaleTimeString()}）`;
+    } catch (error) {
+      document.getElementById("saveStatus").textContent = "保存失败，请导出 JSON 备份";
+      console.error("角色卡保存失败", error);
     }
   }
-
   function loadFromStorage() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed && parsed.slots) {
-          state = Object.assign(state, parsed);
-        }
+        if (!isRecord(parsed) || !isRecord(parsed.slots)) throw new Error("存档结构无效。");
+        const slots = {};
+        Object.entries(parsed.slots).forEach(([id, slot]) => {
+          if (["__proto__", "prototype", "constructor"].includes(id) || !isRecord(slot)) return;
+          slots[id] = {name: typeof slot.name === "string" ? slot.name : "未命名角色", data: cleanData(slot.data)};
+        });
+        if (!Object.keys(slots).length) throw new Error("没有有效角色。");
+        state = { slots, activeSlotId: Object.hasOwn(slots, parsed.activeSlotId) ? parsed.activeSlotId : Object.keys(slots)[0],
+          autoCalc: parsed.autoCalc !== false, autoFill: parsed.autoFill !== false, bilingual: parsed.bilingual === true };
       }
-    } catch (e) {
-      console.error("Failed to load storage:", e);
+      applyStateToDOM();
+      document.getElementById("saveStatus").textContent = raw ? "已载入本地存档" : "本地自动保存";
+    } catch (error) {
+      applyStateToDOM();
+      document.getElementById("saveStatus").textContent = "无法读取本地存档，请先导出或检查浏览器存储";
+      console.error("角色卡载入失败", error);
     }
-    applyStateToDOM();
   }
-
   function applyStateToDOM() {
     const data = getActiveData();
     document.querySelectorAll("[data-field]").forEach((el) => {
-      const key = el.getAttribute("data-field");
-      const val = data[key];
-      if (el.type === "checkbox") {
-        el.checked = Boolean(val);
-      } else {
-        el.value = val !== undefined && val !== null ? val : "";
-      }
+      const value = data[el.dataset.field];
+      if (el.type === "checkbox") el.checked = value === true;
+      else el.value = value ?? "";
     });
-
-    // 同步双语与自动计算按钮状态
+    if (!getVal("house") && getVal("p3_house")) setVal("house", getVal("p3_house"));
+    else setVal("p3_house", getVal("house"));
     document.body.classList.toggle("mode-cn-only", !state.bilingual);
-    const btnLang = document.getElementById("btnToggleLang");
-    if (btnLang) {
-      btnLang.classList.toggle("active", state.bilingual);
-      btnLang.textContent = state.bilingual ? "文/A 双语标签" : "纯中文标签";
-    }
-
-    const btnAuto = document.getElementById("btnToggleAutoCalc");
-    if (btnAuto) {
-      btnAuto.classList.toggle("active", state.autoCalc);
-      btnAuto.textContent = state.autoCalc ? "⚡ 自动计算：开" : "⚡ 自动计算：关";
-    }
-
-    document.querySelectorAll(".calc-output").forEach((el) => {
-      el.readOnly = state.autoCalc;
+    const toggles = [
+      ["btnToggleLang", state.bilingual, "中英双语", "纯中文标签"],
+      ["btnToggleAutoCalc", state.autoCalc, "自动计算：开", "自动计算：关"],
+      ["btnToggleAutoFill", state.autoFill, "自动填写：开", "自动填写：关"]
+    ];
+    toggles.forEach(([id, active, on, off]) => {
+      const button = document.getElementById(id);
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+      button.textContent = active ? on : off;
     });
-
+    document.querySelectorAll(".calc-output").forEach((el) => { el.readOnly = state.autoCalc; });
+    for (let i = 1; i <= 6; i++) {
+      ["init_qik", "atk_dex", "dfn_qik", "dam_str", "init_enc"].forEach((field) => {
+        fieldElement(`wp_${i}_${field}`).readOnly = state.autoCalc;
+      });
+      if (!state.autoCalc) ["atk_ab", "dfn_ab"].forEach((field) => { fieldElement(`wp_${i}_${field}`).readOnly = false; });
+    }
+    ["fc_qik", "fc_finesse", "de_per", "de_awareness", "bt_per", "bt_finesse", "conc_sta", "conc_skill", "mr_parma", "lab_int", "lab_theory"].forEach((field) => {
+      fieldElement(field).readOnly = state.autoCalc;
+      fieldElement(field).title = "自动计算开启时取自第 1 页属性与能力。";
+    });
+    for (let i = 1; i <= 12; i++) refreshSpellReference(i);
     updateSlotSelector();
     runAutoCalculations();
   }
-
   function updateSlotSelector() {
     const select = document.getElementById("slotSelect");
-    if (!select) return;
-    select.innerHTML = "";
-    Object.keys(state.slots).forEach((id) => {
-      const opt = document.createElement("option");
-      opt.value = id;
-      opt.textContent = `📁 ${state.slots[id].name || "未命名角色"}`;
-      if (id === state.activeSlotId) opt.selected = true;
-      select.appendChild(opt);
-    });
+    const options = Object.entries(state.slots).map(([id, slot]) => new Option(slot.name || "未命名角色", id, false, id === state.activeSlotId));
+    select.replaceChildren(...options);
   }
-
-  // ==========================================================================
-  // 5. 术语速查表抽屉逻辑
-  // ==========================================================================
   function renderGlossaryTable() {
-    const query = (document.getElementById("glossarySearchInput")?.value || "")
-      .trim()
-      .toLowerCase();
-    const cat = document.getElementById("glossaryCatFilter")?.value || "ALL";
-    const tbody = document.getElementById("glossaryTableBody");
-    if (!tbody) return;
-
-    const allItems = [];
-    window.ARS_GLOSSARY.techniques.forEach((t) =>
-      allItems.push({ cat: "秘艺与型式", en: `${t.en} (${t.abbr})`, cn: t.cn, src: "总表·核心" })
-    );
-    window.ARS_GLOSSARY.forms.forEach((f) =>
-      allItems.push({ cat: "秘艺与型式", en: `${f.en} (${f.abbr})`, cn: f.cn, src: "总表·核心" })
-    );
-    window.ARS_GLOSSARY.abilities.forEach((a) =>
-      allItems.push({ cat: "能力", en: a.en, cn: a.cn, src: a.src })
-    );
-    window.ARS_GLOSSARY.entries.forEach((e) => allItems.push(e));
-
-    const filtered = allItems.filter((item) => {
-      if (cat !== "ALL" && item.cat !== cat) return false;
-      if (!query) return true;
-      return (
-        item.en.toLowerCase().includes(query) ||
-        item.cn.toLowerCase().includes(query)
-      );
+    const query = normalize(document.getElementById("glossarySearchInput").value);
+    const category = document.getElementById("glossaryCatFilter").value;
+    const rows = G.entries.filter((item) => (category === "ALL" || category === item.cat) &&
+      (!query || [item.en, item.cn, ...(item.aliases || [])].some((text) => normalize(text).includes(query))));
+    const body = document.getElementById("glossaryTableBody");
+    body.replaceChildren();
+    rows.forEach((item) => {
+      const row = body.insertRow();
+      [item.cat, item.en, item.cn, item.src].forEach((value) => { row.insertCell().textContent = value || ""; });
+      if (item.notes) row.title = item.notes;
     });
-
-    tbody.innerHTML = filtered
-      .map(
-        (item) => `<tr>
-          <td><span class="badge" style="color:#5a3e12;background:rgba(181,141,61,0.18);padding:1px 6px;border-radius:4px;font-size:11px;">${item.cat}</span></td>
-          <td style="font-family:Georgia,serif;">${item.en}</td>
-          <td><strong>${item.cn}</strong></td>
-          <td style="color:var(--ink-muted);font-size:11.5px;">${item.src}</td>
-        </tr>`
-      )
-      .join("");
+    document.getElementById("glossaryCount").textContent = `${rows.length} / ${G.entries.length} 条`;
+    if (!rows.length) { const cell = body.insertRow().insertCell(); cell.colSpan = 4; cell.textContent = "没有匹配的定本词条。"; }
   }
-
-  // ==========================================================================
-  // 6. 事件绑定
-  // ==========================================================================
+  function uniqueSlotId(prefix) {
+    return `${prefix}_${globalThis.crypto?.randomUUID?.() || `${Date.now()}_${Math.random().toString(36).slice(2)}`}`;
+  }
   function bindEvents() {
-    document.addEventListener("input", (e) => {
-      const target = e.target;
-      const field = target.getAttribute("data-field");
+    document.getElementById("btnFillHouseDefaults").addEventListener("click", () => {
+      const house = matchEntry(getVal("house"), G.houses);
+      const status = document.getElementById("houseDefaultsStatus");
+      if (!house) { status.textContent = "请先选择一个定本学派。"; return; }
+      fillManaged("domus_magna", house.domus || "", true);
+      fillManaged("primus", house.primus || "", true);
+      status.textContent = `已按定本填写${house.cn}的宗庭与首席。`;
+      saveToStorage();
+    });
+    document.addEventListener("input", (event) => {
+      const target = event.target, field = target.dataset.field;
       if (!field) return;
-
-      const data = getActiveData();
-      if (target.type === "checkbox") {
-        data[field] = target.checked;
-      } else {
-        data[field] = target.value;
-      }
-
-      runAutoCalculations(field);
+      getActiveData()[field] = target.type === "checkbox" ? target.checked : target.value;
+      if (getActiveData().__autoFilled) delete getActiveData().__autoFilled[field];
+      if (field.startsWith("fatigue_") && target.checked) FATIGUE.forEach((name) => { if (`fatigue_${name}` !== field) setVal(`fatigue_${name}`, false); });
+      runAutoFill(field);
+      if (/^spell_\d+_name$/.test(field)) refreshSpellReference(field.split("_")[1]);
+      runAutoCalculations();
       saveToStorage();
     });
-
-    document.getElementById("slotSelect")?.addEventListener("change", (e) => {
-      state.activeSlotId = e.target.value;
-      saveToStorage();
+    document.getElementById("slotSelect").addEventListener("change", (event) => {
+      state.activeSlotId = event.target.value;
       applyStateToDOM();
+      saveToStorage();
     });
-
-    document.getElementById("btnNewSlot")?.addEventListener("click", () => {
-      const name = prompt("请输入新角色的名称：", "新法师角色");
+    document.getElementById("btnNewSlot").addEventListener("click", () => {
+      const name = prompt("新角色名称：", "新法师角色")?.trim();
       if (!name) return;
-      const newId = "char_" + Date.now();
-      state.slots[newId] = {
-        name: name.trim(),
-        data: { character_name: name.trim(), current_year: "1220", size: 0, confidence: "1 (3)" }
-      };
-      state.activeSlotId = newId;
-      saveToStorage();
+      const id = uniqueSlotId("char");
+      state.slots[id] = {name, data: {character_name: name, current_year: "1220", size: "0", confidence: "1 (3)"}};
+      state.activeSlotId = id;
       applyStateToDOM();
-    });
-
-    document.getElementById("btnToggleAutoCalc")?.addEventListener("click", () => {
-      state.autoCalc = !state.autoCalc;
       saveToStorage();
-      applyStateToDOM();
     });
-
-    document.getElementById("btnToggleLang")?.addEventListener("click", () => {
-      state.bilingual = !state.bilingual;
-      saveToStorage();
-      applyStateToDOM();
+    [["btnToggleAutoCalc", "autoCalc"], ["btnToggleAutoFill", "autoFill"], ["btnToggleLang", "bilingual"]].forEach(([id, key]) => {
+      document.getElementById(id).addEventListener("click", () => { state[key] = !state[key]; applyStateToDOM(); saveToStorage(); });
     });
-
-    document.getElementById("btnToggleMatrix")?.addEventListener("click", () => {
+    document.getElementById("btnToggleMatrix").addEventListener("click", () => {
       const wrap = document.getElementById("castingMatrixWrap");
-      if (!wrap) return;
       wrap.style.display = wrap.style.display === "none" ? "block" : "none";
       renderCastingMatrix();
     });
-
     const drawer = document.getElementById("glossaryDrawer");
-    document.getElementById("btnOpenGlossary")?.addEventListener("click", () => {
-      drawer?.classList.add("open");
-      renderGlossaryTable();
+    const closeDrawer = () => { drawer.classList.remove("open"); document.getElementById("btnOpenGlossary").focus(); };
+    document.getElementById("btnOpenGlossary").addEventListener("click", () => {
+      drawer.classList.add("open"); renderGlossaryTable(); document.getElementById("glossarySearchInput").focus();
     });
-    document.getElementById("btnCloseGlossary")?.addEventListener("click", () => {
-      drawer?.classList.remove("open");
-    });
-    drawer?.addEventListener("click", (e) => {
-      if (e.target === drawer) drawer.classList.remove("open");
-    });
-    document.getElementById("glossarySearchInput")?.addEventListener("input", renderGlossaryTable);
-    document.getElementById("glossaryCatFilter")?.addEventListener("change", renderGlossaryTable);
-
-    document.getElementById("btnExportJson")?.addEventListener("click", () => {
+    document.getElementById("btnCloseGlossary").addEventListener("click", closeDrawer);
+    drawer.addEventListener("click", (event) => { if (event.target === drawer) closeDrawer(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && drawer.classList.contains("open")) closeDrawer(); });
+    document.getElementById("glossarySearchInput").addEventListener("input", renderGlossaryTable);
+    document.getElementById("glossaryCatFilter").addEventListener("change", renderGlossaryTable);
+    document.getElementById("btnExportJson").addEventListener("click", () => {
       const data = getActiveData();
-      const charName = (data.character_name || "ars-magica-character").replace(/\s+/g, "_");
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${charName}_角色卡.json`;
-      a.click();
-      URL.revokeObjectURL(url);
+      const name = (String(data.character_name || "ars-magica-character")).replace(/[\\/:*?"<>|\s]+/g, "_");
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+      const url = URL.createObjectURL(blob), link = document.createElement("a");
+      link.href = url; link.download = `${name}_角色卡.json`; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     });
-
-    document.getElementById("inputImportJson")?.addEventListener("change", (e) => {
-      const file = e.target.files?.[0];
+    document.getElementById("inputImportJson").addEventListener("change", async (event) => {
+      const file = event.target.files?.[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const imported = JSON.parse(ev.target.result);
-          if (imported && typeof imported === "object") {
-            const newId = "import_" + Date.now();
-            const name = imported.character_name || file.name.replace(/\.json$/i, "");
-            state.slots[newId] = { name, data: imported };
-            state.activeSlotId = newId;
-            saveToStorage();
-            applyStateToDOM();
-          }
-        } catch (err) {
-          alert("JSON 文件格式有误，无法导入。");
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = "";
+      try {
+        const data = cleanData(JSON.parse(await file.text()));
+        const id = uniqueSlotId("import"), name = String(data.character_name || file.name.replace(/\.json$/i, ""));
+        state.slots[id] = {name, data}; state.activeSlotId = id;
+        applyStateToDOM(); saveToStorage();
+      } catch (error) { alert(`无法导入：${error.message}`); }
+      event.target.value = "";
     });
-
-    document.getElementById("btnPrint")?.addEventListener("click", () => {
-      window.print();
-    });
-
-    document.getElementById("btnReset")?.addEventListener("click", () => {
-      if (!confirm("确定要清空当前角色卡的所有填写内容吗？")) return;
-      state.slots[state.activeSlotId].data = {};
-      saveToStorage();
-      applyStateToDOM();
+    document.getElementById("btnPrint").addEventListener("click", () => window.print());
+    document.getElementById("btnReset").addEventListener("click", () => {
+      if (!confirm("确定清空当前角色卡？其他角色不受影响。")) return;
+      state.slots[state.activeSlotId] = {name: "未命名角色", data: {}};
+      applyStateToDOM(); saveToStorage();
     });
   }
-
   document.addEventListener("DOMContentLoaded", () => {
     buildSheetDOM();
     populateDatalists();

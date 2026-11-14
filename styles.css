@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Ars Magica 5E Definitive Edition - 中文可填写角色卡样式表 (对齐修正版)
+   Ars Magica 5E Definitive Edition - 中文可填写角色卡样式表
    ========================================================================== */
 
 :root {
@@ -1089,28 +1089,32 @@ input[readonly].calc-output {
   body {
     background: none !important;
     padding: 0 !important;
-    font-size: 11.5px;
+    min-height: 0;
+    font-size: 11px;
+    line-height: 1.2;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  .app-toolbar,
-  .drawer-overlay,
-  .no-print {
+  .app-toolbar, .drawer-overlay, .no-print {
     display: none !important;
   }
 
   .sheets-container {
+    display: block;
     margin: 0 !important;
     padding: 0 !important;
-    max-width: 100% !important;
-    gap: 0 !important;
+    max-width: none !important;
   }
 
   .sheet-page {
     box-shadow: none !important;
     margin: 0 !important;
-    padding: 14px 18px 16px !important;
+    padding: 12px 14px !important;
+    overflow: visible;
     page-break-after: always;
     break-after: page;
+    break-inside: avoid;
     border-width: 2px;
   }
 
@@ -1120,12 +1124,103 @@ input[readonly].calc-output {
   }
 
   .panel-box {
-    margin-bottom: 8px !important;
-    padding: 8px 12px !important;
+    margin-bottom: 6px !important;
+    padding: 6px 8px !important;
+    box-shadow: none;
   }
+
+  .section-title { font-size: 13px; margin-bottom: 4px; }
+  .section-header-row { margin-bottom: 4px; padding-bottom: 2px; }
+  .sheet-footer { font-size: 8px; margin-top: 5px; }
+  .page-badge { font-size: 8px; top: 1px; right: 10px; z-index: 5; padding: 0 4px; }
+  .ars-logo-en { font-size: 29px; }
+  .ars-logo-cn { font-size: 17px; }
+  .ars-logo-banner { padding: 5px; }
+
+  input[type="text"], input[type="number"], select, textarea {
+    height: 17px;
+    line-height: 15px;
+    font-size: 10.5px;
+    padding: 0 2px;
+  }
+  .field-row { min-height: 18px; margin-bottom: 2px; gap: 3px; }
+  .field-label, .field-label-lg { font-size: 10.5px; line-height: 17px; }
+  .en-sub { font-size: 7.5px; white-space: normal; }
+  .field-label .en-sub, .field-label-lg .en-sub {
+    display: inline;
+    line-height: inherit;
+    margin-left: 2px;
+  }
+  .exp-box { height: 16px !important; line-height: 14px !important; font-size: 9px !important; }
+  .check-sq { width: 12px; height: 12px; }
+  .lined-list { gap: 2px; }
+
+  .p1-header-grid { gap: 12px; margin-bottom: 5px; }
+  .p1-subbar { gap: 7px; margin-bottom: 6px; }
+  .p1-bio-grid, .p1-main-grid, .p2-top-grid, .p2-combat-grid,
+  .p2-fatigue-wounds-grid, .p3-hermetic-top, .p3-casting-lab-grid,
+  .p3-familiar-grid, .arts-three-col { gap: 10px; }
+  .bio-two-col { gap: 5px; }
+  .char-table td, .ability-table td, .art-table td, .vis-table td {
+    height: 20px;
+    padding: 1px 2px;
+  }
+  .char-table th, .ability-table th, .art-table th, .vis-table th,
+  .fatigue-table th, .wounds-table th, .weapons-table th {
+    font-size: 9px;
+    padding-bottom: 3px;
+  }
+  .char-name .en-sub { display: block; font-size: 7px; line-height: 8px; margin-left: 0; }
+  .char-abbr { font-size: 9px; }
+  .p2-combat-grid { grid-template-columns: 1fr 100px; }
+  .combat-lines-col { gap: 4px; }
+  .combat-indent { padding-left: 64px; }
+  .soak-box { gap: 4px; padding-left: 8px; }
+  .soak-box .big-score { height: 20px; font-size: 12px; }
+  .fatigue-table td, .wounds-table td, .weapons-table td { padding: 2px; height: 23px; }
+  .formula-group { gap: 1px; }
+  .formula-group input { width: 24px !important; height: 18px; font-size: 10px; }
+  .formula-header span { width: 24px; font-size: 9px; }
+  .formula-group .op, .formula-header span.op { width: 7px; font-size: 9px; }
+  .equipment-grid { gap: 3px 10px; }
+  .table-scroll { overflow: visible !important; }
+  .weapons-table { min-width: 0; }
+  .calc-block-header { font-size: 11px; }
+  .calc-subnote { font-size: 8px; }
+  .calc-blocks-stack { gap: 5px; }
+  .calc-equation { gap: 4px; }
+  .calc-equation .eq-op { height: 17px; font-size: 11px; }
+  .calc-equation .eq-col span { font-size: 9px; margin-top: 1px; }
+  .casting-formulas-note { font-size: 9px; padding: 4px 5px; margin-bottom: 5px; line-height: 1.3; }
+  .spells-grid { gap: 2px 8px; }
+  .spell-card { padding: 3px 5px; break-inside: avoid; }
+  .spell-card .field-row { min-height: 16px; margin-bottom: 0; }
+  .spell-card input[type="text"], .spell-card input[type="number"] {
+    height: 16px;
+    line-height: 14px;
+    font-size: 10.5px;
+  }
+  .spell-card .field-label { font-size: 10px; line-height: 10px; }
+  #page-4 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  .spell-row-2col, .spell-row-3col { gap: 4px; }
+  .spell-row-3col .field-row { display: block; }
+  .spell-row-3col .field-label { display: block; line-height: 10px; }
+  #page-2 .panel-box { padding-top: 4px !important; padding-bottom: 4px !important; }
+  #page-2 .ability-table td { height: 18px; padding-top: 0; padding-bottom: 0; }
+  #page-2 .fatigue-table td, #page-2 .wounds-table td { height: 21px; padding-top: 1px; padding-bottom: 1px; }
+  #page-2 .equipment-grid input { height: 15px; line-height: 13px; }
+  #page-2 .equipment-grid { row-gap: 2px; }
 }
 
-@media (max-width: 768px) {
+.weapons-table th:last-child, .weapons-table td:last-child { min-width: 40px; }
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+@media screen and (max-width: 768px) {
   .p1-header-grid,
   .p1-subbar,
   .p1-bio-grid,
@@ -1141,6 +1236,31 @@ input[readonly].calc-output {
   .equipment-grid {
     grid-template-columns: 1fr;
   }
+  .app-toolbar { position: static; padding: 10px; }
+  .toolbar-brand { flex-wrap: wrap; }
+  .toolbar-actions, .toolbar-nav { gap: 5px; }
+  .sheets-container { padding: 0 8px; margin-top: 12px; gap: 18px; }
+  .sheet-page { padding: 20px 14px 16px; }
+  .panel-box { padding: 10px; }
+  .p1-main-grid > *, .p2-top-grid > *, .p3-casting-lab-grid > *,
+  .p3-familiar-grid > *, .spells-grid > * { min-width: 0; }
+  .table-scroll .weapons-table { min-width: 940px; }
+  .fw-col { min-width: 0; overflow-x: auto; }
+  .wounds-table { min-width: 440px; }
+  .spell-row-2col .field-row, .spell-row-3col .field-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .spell-row-2col .field-label, .spell-row-3col .field-label {
+    white-space: normal;
+    line-height: 18px;
+  }
+  .spell-card .en-sub { white-space: normal; }
+  .glossary-controls { flex-wrap: wrap; }
+  .glossary-result-table { table-layout: fixed; }
+  .glossary-result-table td { overflow-wrap: anywhere; }
   .combat-indent {
     padding-left: 0;
   }
@@ -1153,3 +1273,23 @@ input[readonly].calc-output {
     justify-content: space-around;
   }
 }
+
+/* 屏幕上的规则辅助信息不改变纸卡字段。 */
+.rules-controls { background: var(--parchment-light); border: 1px solid var(--border-gold); padding: 12px 16px; border-radius: 4px; }
+.rules-controls summary { cursor: pointer; font-weight: bold; }
+.rules-controls p { margin-top: 8px; font-size: 12px; line-height: 1.6; }
+.rules-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; margin-top: 12px; }
+.rules-grid label { display: flex; flex-direction: column; gap: 4px; }
+.rules-grid input { width: 100%; }
+.rules-grid output { padding: 4px; min-height: 24px; }
+.check-option, .ritual-label, .carried-label { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; font-size: 11px; }
+.check-option { margin-top: 8px; }
+input[type="checkbox"] { flex: none; }
+.spell-reference { font-size: 11px; margin-top: 4px; }
+.spell-reference summary { cursor: pointer; color: var(--ink-muted); }
+.spell-reference div { white-space: pre-wrap; line-height: 1.6; padding: 5px; }
+.spell-reference[hidden] { display: none; }
+.glossary-result-table td { overflow-wrap: anywhere; }
+.glossary-result-table td:last-child { min-width: 120px; }
+#glossaryCount { font-size: 12px; color: var(--ink-muted); margin-bottom: 6px; }
+@media screen and (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
