@@ -8,7 +8,8 @@ const fs = require("node:fs/promises");
 const { pathToFileURL } = require("node:url");
 const { chromium } = require(process.env.ARS_PLAYWRIGHT_PATH || "playwright");
 
-const url = pathToFileURL(path.resolve(__dirname, "../index.html")).href;
+const siteDirectory = process.env.ARS_SITE_DIR || path.resolve(__dirname, "..");
+const url = pathToFileURL(path.resolve(siteDirectory, "index.html")).href;
 const storageKey = "ars_magica_5e_zh_sheets_v1";
 const input = (page, name) => page.locator(`[data-field="${name}"]`);
 const fill = (page, name, value) => input(page, name).fill(String(value));

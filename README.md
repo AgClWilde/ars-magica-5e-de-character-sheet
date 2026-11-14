@@ -58,6 +58,14 @@
 
 中文与双语均适配四页 A4。打印时选择 A4、默认缩放，并关闭浏览器页眉页脚。已用本机 Chrome 检查；其他浏览器和系统字体可能影响分页。手机上伤势及武器表可以局部横向滚动。
 
+## GitHub Pages 发布
+
+上传项目文件时须保留 `.github/workflows/deploy.yml`，并包含 `rules.js`。在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**，再将文件更新到 `main`；工作流也支持在 Actions 页面手动运行。
+
+工作流使用官方 Pages artifact 发布方式，运行环境固定为 Ubuntu 24.04，动作采用 Node.js 24 版本。发布包包含页面所需的全部脚本、样式和署名说明；上传前会检查页面引用的本地资源是否齐全。配置或发布失败会直接报告失败。
+
+GitHub 的设置说明：[配置 Pages 发布来源](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。官方原文：“Under "Build and deployment", under "Source", select GitHub Actions.”
+
 ## 本地核验
 
 纯静态网站只需要 `index.html`、`styles.css`、`glossary-data.js`、`rules.js`、`app.js`。测试与词表生成脚本不参与运行。
@@ -70,6 +78,8 @@ python3 scripts/build-glossary.py --check
 词表检查需要项目上一级的中英文资料库。重建时省略 `--check`；也可用 `--library` 指定资料库位置。脚本核对完整条目数量、法术参数和装备数值的中英文对应关系。
 
 浏览器回归测试见 `tests/browser.test.js`，覆盖自动填写、计算联动、清空、开关与旧存档兼容；使用 Playwright 和 Chrome。
+
+设置 `ARS_SITE_DIR` 可将浏览器测试指向实际发布目录，检查打包后的页面。`ARS_PLAYWRIGHT_PATH` 与 `CHROME_PATH` 可分别指定已有的 Playwright 安装和 Chrome 路径。
 
 ## 署名与许可
 
