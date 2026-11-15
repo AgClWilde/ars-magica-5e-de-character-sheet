@@ -313,7 +313,7 @@
             </div>
             <div class="field-row">
               <label class="field-label">施法加值<span class="en-sub">Bonus</span>:</label>
-              <input type="text" class="calc-output" data-field="spell_${i}_bonus" title="含先决条件、耐力、负荷、施法辉环及精通；仪式另加自由七艺与哲学。不含骰值、伤势及疲劳惩罚。" />
+              <input type="text" class="calc-output" data-field="spell_${i}_bonus" title="含前提、耐力、负荷、施法辉环及精通；仪式另加自由七艺与哲学。不含骰值、伤势及疲劳惩罚。" />
             </div>
           </div>
           <div class="spell-row-3col">
@@ -341,7 +341,7 @@
             </div>
           </div>
           <div class="field-row spell-requisites-row">
-            <label class="field-label">先决条件:</label>
+            <label class="field-label">前提:</label>
             <input type="text" data-field="spell_${i}_requisites" placeholder="秘艺名" />
             <label class="ritual-label"><input type="checkbox" data-field="spell_${i}_ritual" />仪式</label>
           </div>
@@ -460,9 +460,8 @@
     if (!container) return;
     container.hidden = !spell;
     fieldElement(`spell_${i}_level`).placeholder = spell?.general ? "通用：自定等级" : "";
-    fieldElement(`spell_${i}_name`).title = spell?.src || "";
     if (spell) {
-      container.querySelector("div").textContent = [spell.description, spell.notes, spell.src].filter(Boolean).join("\n\n");
+      container.querySelector("div").textContent = [spell.description, spell.notes].filter(Boolean).join("\n\n");
     }
   }
   function runAutoFill(changedField) {
@@ -539,7 +538,7 @@
         if (!result) { clearManaged([score]); return; }
         fillManaged(score, result.score, true);
         fieldElement(exp).title = `累计经验 ${value}；本级进度 ${result.progress}；下一级需要 ${result.nextCost}`;
-      } else { clearManaged([score]); fieldElement(exp).title = "累计经验必须是非负整数；留空后等级可手填。"; }
+      } else { clearManaged([score]); fieldElement(exp).title = "累计经验必须是非负整数；留空后可手填相应的值。"; }
     };
     for (let i = 1; i <= 30; i++) convert(`ab_${i}_exp`, `ab_${i}_score`, "ability");
     arts().forEach((art) => convert(`art_${art.key}_exp`, `art_${art.key}_score`, "art"));
@@ -609,7 +608,7 @@
       } else clearManaged([`wp_${i}_atk_ab`, `wp_${i}_dfn_ab`]);
       const weapon = matchEntry(getVal(`wp_${i}_name`), G.weapons || []);
       const shield = weapon?.type === "shield";
-      if (weapon) fieldElement(`wp_${i}_name`).title = [weapon.notes, weapon.str === null ? "" : `最低力量 ${weapon.str}${getNum("char_str_score") < weapon.str ? "（尚未满足）" : ""}`, weapon.src].filter(Boolean).join("\n");
+      if (weapon) fieldElement(`wp_${i}_name`).title = [weapon.notes, weapon.str === null ? "" : `最低力量 ${weapon.str}${getNum("char_str_score") < weapon.str ? "（尚未满足）" : ""}`].filter(Boolean).join("\n");
       if (active) {
         setVal(`wp_${i}_init_total`, shield ? "" : getNum(`wp_${i}_init_qik`) + getNum(`wp_${i}_init_weap`) - eq.encumbrance);
         setVal(`wp_${i}_atk_total`, shield || weapon?.atk === null ? "" : getNum(`wp_${i}_atk_dex`) + getNum(`wp_${i}_atk_ab`) + getNum(`wp_${i}_atk_weap`));
@@ -620,7 +619,7 @@
     for (const i of spellIndices) {
       const score = spellScore(i);
       setVal(`spell_${i}_bonus`, score === null ? "" : signed(score));
-      fieldElement(`spell_${i}_bonus`).title = score === null ? "需填写明确的技法、型式与先决条件才能计算。" : "含先决条件、精通、负荷、施法辉环；仪式含自由七艺与哲学。不含骰、伤势与疲劳。";
+      fieldElement(`spell_${i}_bonus`).title = score === null ? "需填写明确的技法、型式与前提才能计算。" : "含前提、精通、负荷、施法辉环；仪式含自由七艺与哲学。不含骰、伤势与疲劳。";
     }
     renderCastingMatrix();
     renderRuleSummary();

@@ -46,8 +46,8 @@
         <label>当前魔法抗性<output id="resistanceResult"></output></label>
       </div>
       <p id="ruleSummary" role="status"></p>
-      <label class="check-option"><input type="checkbox" data-field="xp_cumulative" />以累计经验自动换算能力、秘艺及法术精通等级</label>
-      <p>开启累计换算前，请将经验改为从 0 级起的累计投入；清空累计经验会清除相应自动等级。</p>
+      <label class="check-option"><input type="checkbox" data-field="xp_cumulative" />以累计经验自动换算能力、秘艺及法术精通的值</label>
+      <p>开启累计换算前，请将经验改为从零开始的累计投入；清空累计经验会清除自动计算的值。</p>
       <button type="button" id="btnFillHouseDefaults" class="btn">按定本设定重新填写宗庭与首席</button>
       <span id="houseDefaultsStatus" role="status">点击会替换这两项背景资料。</span>
     </details>
@@ -220,7 +220,7 @@
                     <th style="text-align:left;">属性</th>
                     <th>缩写</th>
                     <th>描述<span class="en-sub">Description</span></th>
-                    <th style="width:58px;">数值<span class="en-sub">Score</span></th>
+                    <th style="width:58px;">值<span class="en-sub">Score</span></th>
                   </tr>
                 </thead>
                 <tbody id="characteristicsBody"></tbody>
@@ -253,7 +253,7 @@
                   <th style="width:32px;">经验<span class="en-sub">Exp</span></th>
                   <th style="text-align:left; padding-left:4px;">能力<span class="en-sub">Ability</span></th>
                   <th>专精<span class="en-sub">Speciality</span></th>
-                  <th style="width:52px;">数值<span class="en-sub">Score</span></th>
+                  <th style="width:52px;">值<span class="en-sub">Score</span></th>
                 </tr>
               </thead>
               <tbody id="abilitiesBody"></tbody>
@@ -289,7 +289,7 @@
               <thead>
                 <tr>
                   <th style="text-align:left; padding-left:4px;">特质</th>
-                  <th style="width:56px;">数值<span class="en-sub">Score</span></th>
+                  <th style="width:56px;">值<span class="en-sub">Score</span></th>
                 </tr>
               </thead>
               <tbody id="personalityBody"></tbody>
@@ -305,7 +305,7 @@
                 <tr>
                   <th style="text-align:left; padding-left:4px;">声望内容</th>
                   <th style="width:38%;">类型<span class="en-sub">Type</span></th>
-                  <th style="width:52px;">数值<span class="en-sub">Score</span></th>
+                  <th style="width:52px;">值<span class="en-sub">Score</span></th>
                 </tr>
               </thead>
               <tbody id="reputationsBody"></tbody>
@@ -586,7 +586,7 @@
               <input type="text" data-field="primus" />
             </div>
             <div class="field-row">
-              <label class="field-label">尊长<span class="en-sub">Parens</span>:</label>
+              <label class="field-label">导师<span class="en-sub">Parens</span>:</label>
               <input type="text" data-field="parens" />
             </div>
             <div class="field-row">
@@ -620,7 +620,7 @@
               <tr>
                 <th style="width:32px;">经验</th>
                 <th style="text-align:left; padding-left:4px;">技法<span class="en-sub">Technique</span></th>
-                <th style="width:58px;">数值</th>
+                <th style="width:58px;">值</th>
               </tr>
             </thead>
             <tbody id="techniquesBody"></tbody>
@@ -632,7 +632,7 @@
               <tr>
                 <th style="width:32px;">经验</th>
                 <th style="text-align:left; padding-left:4px;">型式<span class="en-sub">Form</span></th>
-                <th style="width:58px;">数值</th>
+                <th style="width:58px;">值</th>
               </tr>
             </thead>
             <tbody id="formsCol1Body"></tbody>
@@ -644,7 +644,7 @@
               <tr>
                 <th style="width:32px;">经验</th>
                 <th style="text-align:left; padding-left:4px;">型式<span class="en-sub">Form</span></th>
-                <th style="width:58px;">数值</th>
+                <th style="width:58px;">值</th>
               </tr>
             </thead>
             <tbody id="formsCol2Body"></tbody>
@@ -654,7 +654,7 @@
         <!-- 可展开的 5x10 技法×型式 施法总值矩阵 (打印时默认隐藏，也可参考) -->
         <div id="castingMatrixWrap" class="no-print" style="display:none; margin-top:10px;">
           <div style="font-size:11.5px; color:var(--ink-muted); margin-bottom:4px;">
-            <strong>范式施法基础值矩阵</strong>（技法 + 型式 + 耐力 − 负荷 + 施法辉环调整值；括号内为无疲劳即兴值，向下取整。不含先决条件、精通或伤疲；悬停查看计入伤疲的值）：
+            <strong>范式施法基础值矩阵</strong>（技法 + 型式 + 耐力 − 负荷 + 施法辉环调整值；括号内为无疲劳即兴值，向下取整。不含前提、精通或伤疲；悬停查看计入伤疲的值）：
           </div>
           <table class="matrix-table" id="castingMatrixTable"></table>
         </div>
@@ -673,7 +673,7 @@
             <div class="section-title">
               基础施法总值<span class="en-sub">Base Casting Totals</span>
             </div>
-            <div class="casting-formulas-note" title="先决条件分别取相应秘艺最低值；已精通法术另加精通等级。以下为常规公式，伤疲及特殊修正另计。">
+            <div class="casting-formulas-note" title="前提分别取相应秘艺最低值；已精通法术另加精通值。以下为常规公式，伤疲及特殊修正另计。">
               <div><strong>范式：</strong>技法 + 型式 + 耐力 − 负荷 + 辉环调整值 + 骰值</div>
               <div><strong>仪式：</strong>技法 + 型式 + 耐力 − 负荷 + 辉环调整值 + 自由七艺 + 哲学 + 骰值</div>
               <div><strong>即兴（疲劳）：</strong>(技法 + 型式 + 耐力 − 负荷 + 辉环调整值 + 压力骰) / 2</div>
@@ -681,10 +681,10 @@
             </div>
 
             <div class="calc-blocks-stack">
-              <!-- 快速施法速度 -->
+              <!-- 疾速施法速度 -->
               <div class="calc-block">
                 <div class="calc-block-header">
-                  <span>快速施法速度<span class="en-sub">Fast Casting Speed</span></span>
+                  <span>疾速施法速度<span class="en-sub">Fast Casting Speed</span></span>
                   <span class="calc-subnote">(+ 压力骰)</span>
                 </div>
                 <div class="calc-equation">
@@ -705,10 +705,10 @@
                 </div>
               </div>
 
-              <!-- 判定效果 -->
+              <!-- 确定效果型式 -->
               <div class="calc-block">
                 <div class="calc-block-header">
-                  <span>判定效果<span class="en-sub">Determining Effect</span></span>
+                  <span>确定效果型式<span class="en-sub">Determining Effect</span></span>
                   <span class="calc-subnote">(+ 骰值，对抗 15–能级)</span>
                 </div>
                 <div class="calc-equation">
@@ -855,7 +855,7 @@
             <!-- 源质 -->
             <div class="vis-section-wrap">
               <div class="section-title">
-                源质<span class="en-sub">Raw Vis</span>
+                原始源质<span class="en-sub">Raw Vis</span>
               </div>
               <table class="vis-table">
                 <thead>
@@ -911,19 +911,19 @@
             <div class="field-row"><label class="field-label">伤害:</label><input type="text" data-field="fam_dam" /></div>
           </div>
 
-          <!-- 三重羁绊绳索与纽带特质 -->
+          <!-- 三条纽带与纽带特质 -->
           <div class="fam-bond-col">
             <div class="cords-row">
               <div class="field-row">
-                <label class="field-label">铜索:</label>
+                <label class="field-label">铜纽带:</label>
                 <input type="number" data-field="fam_bronze_cord" />
               </div>
               <div class="field-row">
-                <label class="field-label">银索:</label>
+                <label class="field-label">银纽带:</label>
                 <input type="number" data-field="fam_silver_cord" />
               </div>
               <div class="field-row">
-                <label class="field-label">金索:</label>
+                <label class="field-label">金纽带:</label>
                 <input type="number" data-field="fam_gold_cord" />
               </div>
             </div>

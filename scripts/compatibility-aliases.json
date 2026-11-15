@@ -1,0 +1,134 @@
+{
+  "核心术语": {
+    "The Infernal": [
+      "下界域（The Infernal）"
+    ]
+  },
+  "魔法规则": {
+    "The Limit of the Divine": [
+      "神性的限制"
+    ]
+  },
+  "工坊规则": {
+    "Enchantments": [
+      "工坊附魔"
+    ]
+  },
+  "界域": {
+    "The Infernal Realm": [
+      "下界域"
+    ]
+  },
+  "能力": {
+    "Civil and Canon Law": [
+      "公民法与教会法"
+    ],
+    "Craft (Type)": [
+      "（类型）工艺"
+    ],
+    "Judaic Lore": [
+      "犹太知识"
+    ],
+    "Persona": [
+      "化身"
+    ]
+  },
+  "优势": {
+    "Cautious Sorcerer": [
+      "谨慎施法"
+    ],
+    "Clan Ilfetu": [
+      "伊尔费图"
+    ],
+    "Cyclic Magic (positive)": [
+      "节律魔法（正向）"
+    ],
+    "Persona": [
+      "化身"
+    ],
+    "Town Magistrate": [
+      "市镇治安官"
+    ]
+  },
+  "劣势": {
+    "Meddler": [
+      "爱管闲事"
+    ],
+    "Mentor": [
+      "导师"
+    ],
+    "Outlaw": [
+      "逃犯"
+    ],
+    "Poor (Characteristic)": [
+      "低劣属性"
+    ],
+    "Rector/Proctor": [
+      "校长／学务代表"
+    ],
+    "Short Attention Span": [
+      "一曝十寒"
+    ],
+    "Unruly Air": [
+      "颠覆气质"
+    ],
+    "Vow": [
+      "誓言"
+    ],
+    "Vulnerable Magic": [
+      "易伤魔法"
+    ],
+    "Witch Marks": [
+      "巫师印记"
+    ]
+  },
+  "法术": {
+    "Ward against the Beasts of Legend": [
+      "传奇之兽守护结界"
+    ],
+    "Preternatural Growth and Shrinking": [
+      "疯狂生长 / 急剧收缩"
+    ],
+    "Freeing the Striding Tree": [
+      "树木之战士"
+    ],
+    "Wizard's Icy Grip": [
+      "法师的冰之握"
+    ],
+    "Wizard's Eclipse": [
+      "蚀日"
+    ],
+    "Haunt of the Living Ghost": [
+      "幻影化身"
+    ],
+    "Discern Own Illusions": [
+      "镜影幻象"
+    ],
+    "Wizard's Sidestep": [
+      "法师侧步"
+    ],
+    "Confusion of the Numbed Will": [
+      "混乱灵气"
+    ],
+    "Shell of Opaque Mysteries": [
+      "无所知者的庇护"
+    ],
+    "Wizard's Boost (Form)": [
+      "强效秘法（型式）"
+    ],
+    "Wizard's Reach (Form)": [
+      "法师延伸（型式）"
+    ],
+    "Watching Ward": [
+      "坚守之眼"
+    ],
+    "Gather the Essence of the Beast": [
+      "集兽精"
+    ]
+  },
+  "武器": {
+    "Stone": [
+      "石头"
+    ]
+  }
+}

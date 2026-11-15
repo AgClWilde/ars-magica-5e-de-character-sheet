@@ -317,6 +317,25 @@ def build(library):
                 item["aliases"] = list(dict.fromkeys(value for value in values if value != item["cn"] and (value not in canonical or value == item["cn"])))
     for key in ("houses", "techniques", "forms", "abilities", "virtues", "flaws", "spells", "weapons", "armors"):
         out["entries"].extend(out[key])
+    # 已保存角色使用过的译名继续用于匹配；选项和检索结果仍显示现行定译。
+    compatibility_path = PROJECT / "scripts/compatibility-aliases.json"
+    compatibility_data = compatibility_path.read_bytes()
+    compatibility = json.loads(compatibility_data)
+    out["meta"]["compatibilityNames"] = {
+        "file": "scripts/compatibility-aliases.json",
+        "sha256": hashlib.sha256(compatibility_data).hexdigest(),
+    }
+    canonical_by_category = {}
+    for item in out["entries"]:
+        canonical_by_category.setdefault(item["cat"], set()).add(item["cn"])
+    for item in out["entries"]:
+        previous = compatibility.get(item["cat"], {}).get(item["en"], [])
+        if previous:
+            values = item.get("aliases", []) + previous
+            item["aliases"] = list(dict.fromkeys(
+                value for value in values
+                if value != item["cn"] and value not in canonical_by_category[item["cat"]]
+            ))
     unique = {}
     for item in out["entries"]:
         unique.setdefault((item["cat"], item["en"], item["cn"]), item)

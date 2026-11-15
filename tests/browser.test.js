@@ -82,6 +82,26 @@ test("学派双向同步、默认人事更新且保留手改资料", async () =>
   assert.equal(await value(page, "primus"), "本传奇首席");
 }));
 
+test("现行译名自动填写，旧译名存档仍可匹配且说明不附出处", async () => withPage(async (page) => {
+  assert.equal(await page.locator('#datalist-spells option[value="守望结界"]').count(), 1);
+  assert.equal(await page.locator('#datalist-spells option[value="坚守之眼"]').count(), 0);
+  assert.equal(await page.locator('#datalist-abilities option[value="民法与教会法"]').count(), 1);
+  await fill(page, "spell_1_name", "守望结界");
+  assert.equal(await value(page, "spell_1_tech"), "掌控");
+  assert.equal(await value(page, "spell_1_form"), "原初");
+  assert.equal(await input(page, "spell_1_ritual").isChecked(), true);
+  assert.match(await page.locator("#spellReference1").textContent(), /守望结界会将另一道法术暂存/);
+  assert.doesNotMatch(await page.locator("#spellReference1").textContent(), /定本·|中文 L\d+|英文 L\d+/);
+  await fill(page, "spell_1_name", "坚守之眼");
+  assert.equal(await value(page, "spell_1_duration"), "特殊");
+  await fill(page, "wp_1_name", "石头");
+  assert.equal(await value(page, "wp_1_ability"), "投掷武器");
+  assert.doesNotMatch(await input(page, "wp_1_name").getAttribute("title"), /定本·|中文 L\d+|英文 L\d+/);
+  await page.reload();
+  assert.equal(await value(page, "spell_1_name"), "坚守之眼");
+  assert.match(await page.locator("#spellReference1").textContent(), /守望结界会将另一道法术暂存/);
+}));
+
 test("能力精确匹配，修改与删除同步清除关联小计", async () => withPage(async (page) => {
   await fill(page, "char_qik_score", 2);
   await fill(page, "ab_1_name", "Finesse");
