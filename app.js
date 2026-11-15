@@ -327,7 +327,7 @@
           </div>
           <div class="field-row spell-requisites-row">
             <label class="field-label">先决条件:</label>
-            <input type="text" data-field="spell_${i}_requisites" placeholder="秘艺名，以顿号分隔" />
+            <input type="text" data-field="spell_${i}_requisites" placeholder="秘艺名" />
             <label class="ritual-label"><input type="checkbox" data-field="spell_${i}_ritual" />仪式</label>
           </div>
           <div class="field-row">

@@ -48,16 +48,14 @@
         <label>其他携带物负重<input type="number" data-field="equipment_load" min="0" placeholder="0" /></label>
         <label>护甲防护值<input type="number" data-field="armor_protection" min="0" placeholder="填入后计算吸收" /></label>
         <label>其他吸收修正<input type="number" data-field="soak_bonus" placeholder="0" /></label>
-        <label>抗性所用型式<input type="text" data-field="resistance_form" list="datalist-forms" placeholder="选择型式" /></label>
+        <label>抗性型式<input type="text" data-field="resistance_form" list="datalist-forms" placeholder="选择型式" /></label>
         <label>当前魔法抗性<output id="resistanceResult"></output></label>
       </div>
       <p id="ruleSummary" role="status"></p>
-      <p>总负重包括护甲、勾选“携带”的武器和其他携带物。负重先换算为负载，再减正力量得到负荷。武器栏为基础值，不含骰、专长、盾牌合用及伤疲修正；主要由其他物品造成的负荷是否影响攻防，需按具体动作裁定。盾牌只列修正，不单独生成总值；合用时将修正计入所用武器。</p>
-      <p>施法与工坊辉环分别填写调整后的数值：魔法 +强度，妖精 +⌊强度÷2⌋，天界 −3×强度，下界 −强度。抗性按绛咒生效且未分享保护计算。特殊优势、劣势、专长、施法手势与语声修正由玩家另计。</p>
       <label class="check-option"><input type="checkbox" data-field="xp_cumulative" />以累计经验自动换算能力、秘艺及法术精通等级</label>
-      <p>默认“经验”记录升下一级的进度，等级手填。开启累计换算前，请将经验改为从 0 级起的累计投入；清空累计经验会清除相应自动等级，之后可手填。学习亲和等经验修正应先计入累计值，善于等等级加值仍须另计。</p>
-      <button type="button" id="btnFillHouseDefaults" class="btn">按定本重填宗庭与首席</button>
-      <span id="houseDefaultsStatus" role="status">适用于更新旧角色；会替换这两项背景资料。</span>
+      <p>开启累计换算前，请将经验改为从 0 级起的累计投入；清空累计经验会清除相应自动等级。</p>
+      <button type="button" id="btnFillHouseDefaults" class="btn">按定本（Definitive Version）重新填写宗庭与首席</button>
+      <span id="houseDefaultsStatus" role="status">点击会替换这两项背景资料。</span>
     </details>
 
 

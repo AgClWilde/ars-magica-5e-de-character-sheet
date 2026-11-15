@@ -1,16 +1,16 @@
-# 魔法秘艺定本 · 中文网页版角色卡
+# 魔法秘艺定本 网页版角色卡
 
-四页角色卡，可直接用浏览器打开 `index.html`，也可上传为静态网站。运行时不需要联网、账号或安装依赖。角色保存在当前浏览器，建议定期导出 JSON 备份。
+角色保存在当前浏览器，建议定期导出 JSON 备份。
 
 ## 自动填写
 
-- 学派：同步第 1、3 页；填写定本中的宗庭与首席。手动修改过的背景资料会保留。学派资料是书中默认背景，可随传奇调整。旧角色可在“计算设置与当前状态”点击“按定本重填宗庭与首席”，明确替换这两项资料。
-- 法术：选定中文名、英文名或已收录别名后，填入技法、型式、等级、范围、持续时间、目标、固定前提及仪式标志。360 个法术均附中文规则说明与中英文来源位置。
-- 通用等级法术保留空等级，请填写实际学习的版本。依施法对象而变化的前提需参照展开的规则说明填写。
+- 学派：同步第 1、3 页；填写定本中的宗庭与首席。手动修改过的背景资料会保留。学派资料是书中默认背景，可随传奇调整。
+- 法术：选定中文名、英文名或已收录别名后，填入技法、型式、等级、范围、持续时间、目标、固定前提及仪式标志。
+- 通用等级法术保留空等级，请填写实际学习的版本。
 - 武器：填写武器修正、能力、负重和射程，并勾选“携带”。只将实际携带的武器计入负重；同一武器的备选攻击方式不要重复勾选。护甲选名后填入防护值与负重。
 - 优势、劣势分开补全。能力、秘艺、法术参数也有定本词条联想。
 
-“自动填写”和“自动计算”分别开关。选择另一法术或装备会更新其规则参数；法术的个人备注、经验和精通由玩家管理。自订内容可以自由输入。
+“自动填写”和“自动计算”分别开关。选择另一法术或装备会更新其规则参数。自订内容可以自由输入。
 
 ## 自动计算
 
@@ -24,7 +24,7 @@
 - 长寿修正按每 5 点工坊总值或余数计一级；无超自然能力者勾选每 10 点。清空总值会清除旧结果。
 - 秘艺矩阵显示常规施法加值及无疲劳即兴值，悬停可查看伤疲修正后的值。
 
-自动计算开启时，派生属性取自第 1 页。关闭后可手动填写。空白数值按零处理；未知秘艺或前提不生成法术加值。特殊优势、劣势、专长、语声、手势、盾牌组合和具体施法条件仍须玩家处理。
+自动计算开启时，派生属性取自第 1 页。关闭后可手动填写。空白数值按零处理；未知秘艺或前提不生成法术加值。
 
 ### 经验记录
 
@@ -32,54 +32,17 @@
 
 清空累计经验会清除对应的自动等级，之后可手填。经验学习修正应先反映在累计数中；直接提高能力值的优势不会自动应用。
 
-## 术语与依据
-
-内置 1,424 条定本词条，其中包括 318 项优势、308 项劣势、78 项能力、360 个法术、35 项武器、10 套护甲、12 个学派及 15 项秘艺。术语表按类别与中英文检索，显示来源章节及中英文行号。中文定译采用本地定本译稿，旧词表只提供同一语境的检索别名。
-
-- [英文定本](../Organized/5e/Definitive%20Edition/Core%20Rules/Ars%20Magica%20-%20Definitive%20Edition%20%5BOpen%20License%20-%20Reviewed%5D.md)
-- [中文定本译稿](../翻译/5E/Definitive%20Edition/Core%20Rules/Ars%20Magica%20-%20Definitive%20Edition%20%5BOpen%20License%20-%20Reviewed%5D.md)
-- 原文开放许可整理：[Ars Magica Open License](https://github.com/OriginalMadman/Ars-Magica-Open-License)
-
-关键规则原句（英文文件中的可定位章节）：
-
-> “CASTING SCORE: Technique + Form + Stamina - Encumbrance + Aura Modifier”
-
-[第 7 章 Casting Spells，第 9174 行](../Organized/5e/Definitive%20Edition/Core%20Rules/Ars%20Magica%20-%20Definitive%20Edition%20%5BOpen%20License%20-%20Reviewed%5D.md#casting-spells)。仪式公式在第 9206 行，前提规则见第 12394–12412 行。
-
-> “If the character has positive Strength, his Encumbrance is the amount by which his Burden exceeds his Strength.”
-
-[第 11 章 Encumbrance，第 17213 行](../Organized/5e/Definitive%20Edition/Core%20Rules/Ars%20Magica%20-%20Definitive%20Edition%20%5BOpen%20License%20-%20Reviewed%5D.md#encumbrance)。术语分别为负重（Load）、负载（Burden）、负荷（Encumbrance）。
-
-每条数据保留来源文件、章节与行号；输入文件的 SHA-256 存于 `glossary-data.js` 的 `meta`。相邻资料库不随网站部署；网站显示的来源位置与规则说明仍可离线查阅。
-
 ## 存档与打印
 
 沿用原有浏览器存档键和字段名，可直接载入旧角色及旧 JSON 文件。导入会创建独立角色，不覆盖当前角色。导出文件保留个人填写内容与自动填写来源标记。不同浏览器、不同网址或本地文件地址通常使用不同的存储空间，跨设备请导入导出。
 
-中文与双语均适配四页 A4。打印时选择 A4、默认缩放，并关闭浏览器页眉页脚。已用本机 Chrome 检查；其他浏览器和系统字体可能影响分页。手机上伤势及武器表可以局部横向滚动。
+中文与双语均适配四页 A4。打印时选择 A4、默认缩放，并关闭浏览器页眉页脚。
 
 ## GitHub Pages 发布
 
 上传项目文件时须保留 `.github/workflows/deploy.yml`，并包含 `rules.js`。在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**，再将文件更新到 `main`；工作流也支持在 Actions 页面手动运行。
 
 工作流使用官方 Pages artifact 发布方式，运行环境固定为 Ubuntu 24.04，动作采用 Node.js 24 版本。发布包包含页面所需的全部脚本、样式和署名说明；上传前会检查页面引用的本地资源是否齐全。配置或发布失败会直接报告失败。
-
-GitHub 的设置说明：[配置 Pages 发布来源](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。官方原文：“Under "Build and deployment", under "Source", select GitHub Actions.”
-
-## 本地核验
-
-纯静态网站只需要 `index.html`、`styles.css`、`glossary-data.js`、`rules.js`、`app.js`。测试与词表生成脚本不参与运行。
-
-```sh
-node --test tests/rules.test.js
-python3 scripts/build-glossary.py --check
-```
-
-词表检查需要项目上一级的中英文资料库。重建时省略 `--check`；也可用 `--library` 指定资料库位置。脚本核对完整条目数量、法术参数和装备数值的中英文对应关系。
-
-浏览器回归测试见 `tests/browser.test.js`，覆盖自动填写、计算联动、清空、开关与旧存档兼容；使用 Playwright 和 Chrome。
-
-设置 `ARS_SITE_DIR` 可将浏览器测试指向实际发布目录，检查打包后的页面。`ARS_PLAYWRIGHT_PATH` 与 `CHROME_PATH` 可分别指定已有的 Playwright 安装和 Chrome 路径。
 
 ## 署名与许可
 
