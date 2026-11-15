@@ -6,6 +6,8 @@
   "use strict";
 
   const STORAGE_KEY = "ars_magica_5e_zh_sheets_v1";
+  const DEFAULT_SPELL_COUNT = 12;
+  let spellIndices = [];
   let state = {
     activeSlotId: "default",
     autoCalc: true,
@@ -271,9 +273,22 @@
       );
     }
 
-    // 1.11 Page 4: 法术栏 (12个法术区块，双列6行)
+    // 1.11 Page 4: 默认法术栏
+    renderSpellCards({});
+  }
+
+  function renderSpellCards(data) {
+    const indices = new Set(Array.from({length: DEFAULT_SPELL_COUNT}, (_, i) => i + 1));
+    Object.keys(data).forEach((field) => {
+      const match = /^spell_([1-9]\d*)_/.exec(field);
+      if (match) indices.add(Number(match[1]));
+    });
+    const nextIndices = [...indices].sort((a, b) => a - b);
+    if (nextIndices.length === spellIndices.length && nextIndices.every((index, i) => index === spellIndices[i])) return;
+    spellIndices = nextIndices;
     const spellsGrid = document.getElementById("spellsGrid");
-    for (let i = 1; i <= 12; i++) {
+    spellsGrid.replaceChildren();
+    for (const i of spellIndices) {
       spellsGrid.insertAdjacentHTML(
         "beforeend",
         `<div class="spell-card">
@@ -444,10 +459,10 @@
     const container = document.getElementById(`spellReference${i}`);
     if (!container) return;
     container.hidden = !spell;
+    fieldElement(`spell_${i}_level`).placeholder = spell?.general ? "通用：自定等级" : "";
+    fieldElement(`spell_${i}_name`).title = spell?.src || "";
     if (spell) {
       container.querySelector("div").textContent = [spell.description, spell.notes, spell.src].filter(Boolean).join("\n\n");
-      const name = fieldElement(`spell_${i}_name`);
-      name.title = spell.src || "";
     }
   }
   function runAutoFill(changedField) {
@@ -475,7 +490,6 @@
           requisites: (spell.requisites || []).map(artName).join("、"), ritual: !!spell.ritual
         };
         Object.entries(values).forEach(([k, value]) => fillManaged(`spell_${i}_${k}`, value, true));
-        fieldElement(`spell_${i}_level`).placeholder = spell.general ? "通用：自定等级" : "";
       } else clearManaged(fields);
       refreshSpellReference(i);
     }
@@ -529,7 +543,7 @@
     };
     for (let i = 1; i <= 30; i++) convert(`ab_${i}_exp`, `ab_${i}_score`, "ability");
     arts().forEach((art) => convert(`art_${art.key}_exp`, `art_${art.key}_score`, "art"));
-    for (let i = 1; i <= 12; i++) convert(`spell_${i}_exp`, `spell_${i}_mastery`, "ability");
+    for (const i of spellIndices) convert(`spell_${i}_exp`, `spell_${i}_mastery`, "ability");
   }
   function spellScore(i) {
     const technique = artScore(getVal(`spell_${i}_tech`), G.techniques);
@@ -603,7 +617,7 @@
         setVal(`wp_${i}_dam_total`, shield || weapon?.dam === null ? "" : getNum(`wp_${i}_dam_str`) + getNum(`wp_${i}_dam_weap`));
       } else ["init", "atk", "dfn", "dam"].forEach((kind) => setVal(`wp_${i}_${kind}_total`, ""));
     }
-    for (let i = 1; i <= 12; i++) {
+    for (const i of spellIndices) {
       const score = spellScore(i);
       setVal(`spell_${i}_bonus`, score === null ? "" : signed(score));
       fieldElement(`spell_${i}_bonus`).title = score === null ? "需填写明确的技法、型式与先决条件才能计算。" : "含先决条件、精通、负荷、施法辉环；仪式含自由七艺与哲学。不含骰、伤势与疲劳。";
@@ -648,11 +662,13 @@
     if (!isRecord(value)) throw new Error("角色数据必须是对象。");
     const result = {};
     let count = 0;
-    document.querySelectorAll("[data-field]").forEach((el) => {
-      const field = el.dataset.field;
-      if (!Object.hasOwn(value, field)) return;
-      const entry = value[field];
-      if (el.type === "checkbox") {
+    const fields = new Map([...document.querySelectorAll("[data-field]")].map((el) => [el.dataset.field, el.type]));
+    Object.entries(value).forEach(([field, entry]) => {
+      const spell = /^spell_([1-9]\d*)_(.+)$/.exec(field);
+      if (spell && !Number.isSafeInteger(Number(spell[1]))) throw new Error("法术栏位编号无效。");
+      const schemaField = spell ? `spell_1_${spell[2]}` : field;
+      if (!fields.has(schemaField)) return;
+      if (fields.get(schemaField) === "checkbox") {
         if (typeof entry !== "boolean" && entry !== 0 && entry !== 1) throw new Error(`勾选项 ${field} 格式不正确。`);
         result[field] = !!entry;
       } else {
@@ -677,9 +693,8 @@
       if (name) state.slots[state.activeSlotId].name = name;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateSlotSelector();
-      document.getElementById("saveStatus").textContent = `已保存（${new Date().toLocaleTimeString()}）`;
     } catch (error) {
-      document.getElementById("saveStatus").textContent = "保存失败，请导出 JSON 备份";
+      alert("保存失败，请导出 JSON 备份。");
       console.error("角色卡保存失败", error);
     }
   }
@@ -699,15 +714,15 @@
           autoCalc: parsed.autoCalc !== false, autoFill: parsed.autoFill !== false, bilingual: parsed.bilingual === true };
       }
       applyStateToDOM();
-      document.getElementById("saveStatus").textContent = raw ? "已载入本地存档" : "本地自动保存";
     } catch (error) {
       applyStateToDOM();
-      document.getElementById("saveStatus").textContent = "无法读取本地存档，请先导出或检查浏览器存储";
+      alert("无法读取本地存档，请先导出或检查浏览器存储。");
       console.error("角色卡载入失败", error);
     }
   }
   function applyStateToDOM() {
     const data = getActiveData();
+    renderSpellCards(data);
     document.querySelectorAll("[data-field]").forEach((el) => {
       const value = data[el.dataset.field];
       if (el.type === "checkbox") el.checked = value === true;
@@ -738,7 +753,7 @@
       fieldElement(field).readOnly = state.autoCalc;
       fieldElement(field).title = "自动计算开启时取自第 1 页属性与能力。";
     });
-    for (let i = 1; i <= 12; i++) refreshSpellReference(i);
+    for (const i of spellIndices) refreshSpellReference(i);
     updateSlotSelector();
     runAutoCalculations();
   }
@@ -756,16 +771,24 @@
     body.replaceChildren();
     rows.forEach((item) => {
       const row = body.insertRow();
-      [item.cat, item.en, item.cn, item.src].forEach((value) => { row.insertCell().textContent = value || ""; });
+      [item.cat, item.en, item.cn].forEach((value) => { row.insertCell().textContent = value || ""; });
       if (item.notes) row.title = item.notes;
     });
     document.getElementById("glossaryCount").textContent = `${rows.length} / ${G.entries.length} 条`;
-    if (!rows.length) { const cell = body.insertRow().insertCell(); cell.colSpan = 4; cell.textContent = "没有匹配的定本词条。"; }
+    if (!rows.length) { const cell = body.insertRow().insertCell(); cell.colSpan = 3; cell.textContent = "没有匹配的定本词条。"; }
   }
   function uniqueSlotId(prefix) {
     return `${prefix}_${globalThis.crypto?.randomUUID?.() || `${Date.now()}_${Math.random().toString(36).slice(2)}`}`;
   }
   function bindEvents() {
+    document.getElementById("btnAddSpell").addEventListener("click", () => {
+      let index = DEFAULT_SPELL_COUNT + 1;
+      while (spellIndices.includes(index)) index++;
+      getActiveData()[`spell_${index}_name`] = "";
+      applyStateToDOM();
+      saveToStorage();
+      fieldElement(`spell_${index}_name`).focus();
+    });
     document.getElementById("btnFillHouseDefaults").addEventListener("click", () => {
       const house = matchEntry(getVal("house"), G.houses);
       const status = document.getElementById("houseDefaultsStatus");

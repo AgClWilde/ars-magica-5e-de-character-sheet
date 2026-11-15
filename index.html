@@ -9,12 +9,6 @@
 <body class="mode-cn-only">
   <!-- ==================== 顶部固定工具栏 ==================== -->
   <header class="app-toolbar no-print">
-    <div class="toolbar-brand">
-      <h1>Ars Magica 魔法秘艺</h1>
-      <span class="badge">五版 Definitive Edition 中文角色卡</span>
-      <span id="saveStatus" class="save-status" role="status">正在载入</span>
-    </div>
-
     <nav class="toolbar-nav">
       <a href="#page-1" class="btn">第1页：角色与能力</a>
       <a href="#page-2" class="btn">第2页：战斗与装备</a>
@@ -34,7 +28,7 @@
         ⬆ 导入 JSON
         <input type="file" id="inputImportJson" accept=".json" style="display:none;" />
       </label>
-      <button type="button" id="btnPrint" class="btn btn-primary" title="打印或另存为4页A4 PDF">🖨 打印 / PDF</button>
+      <button type="button" id="btnPrint" class="btn btn-primary" title="打印或另存为A4 PDF">🖨 打印 / PDF</button>
       <button type="button" id="btnReset" class="btn btn-danger" title="清空当前角色卡">清空</button>
     </div>
   </header>
@@ -54,7 +48,7 @@
       <p id="ruleSummary" role="status"></p>
       <label class="check-option"><input type="checkbox" data-field="xp_cumulative" />以累计经验自动换算能力、秘艺及法术精通等级</label>
       <p>开启累计换算前，请将经验改为从 0 级起的累计投入；清空累计经验会清除相应自动等级。</p>
-      <button type="button" id="btnFillHouseDefaults" class="btn">按定本（Definitive Version）重新填写宗庭与首席</button>
+      <button type="button" id="btnFillHouseDefaults" class="btn">按定本设定重新填写宗庭与首席</button>
       <span id="houseDefaultsStatus" role="status">点击会替换这两项背景资料。</span>
     </details>
 
@@ -93,8 +87,7 @@
         </div>
 
         <div class="ars-logo-banner">
-          <div class="ars-logo-en">Ars Magica</div>
-          <div class="ars-logo-cn">魔法秘艺</div>
+          <h1 class="ars-logo-title">魔法秘艺 5E Definitive Edition</h1>
           <div class="ars-logo-sub">角色卡</div>
         </div>
       </div>
@@ -948,7 +941,7 @@
     </section>
 
     <!-- ==========================================================
-         PAGE 4: 法术记录页 (12个标准法术栏位)
+         PAGE 4: 法术记录页 (默认12个法术栏位，可新增)
          ========================================================== -->
     <section id="page-4" class="sheet-page">
       <span class="page-badge">4 / 4 页</span>
@@ -968,6 +961,9 @@
 
       <div class="sheet-footer">
         允许为个人使用进行影印。© 2025 Trident, Inc. d/b/a Atlas Games. (Permission granted to photocopy for personal use.)
+      </div>
+      <div class="sheet-actions no-print">
+        <button type="button" id="btnAddSpell" class="btn">+ 新增法术块</button>
       </div>
     </section>
 
@@ -992,7 +988,6 @@
               <th style="width:110px;">分类</th>
               <th>英文</th>
               <th>中文译名</th>
-              <th style="width:95px;">出处</th>
             </tr>
           </thead>
           <tbody id="glossaryTableBody"></tbody>

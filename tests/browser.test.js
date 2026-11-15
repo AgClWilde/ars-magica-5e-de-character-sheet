@@ -270,3 +270,65 @@ test("JSON 导入导出往返及无效对象拒绝", async () => withPage(async 
   assert.equal(await page.locator("#slotSelect option").count(), count);
   assert.equal(await value(page, "character_name"), imported.character_name);
 }));
+
+
+test("新增法术支持自动填写、计算、存档、切槽与 JSON 往返", async () => withPage(async (page) => {
+  await page.locator("#btnAddSpell").click();
+  await page.locator("#btnAddSpell").click();
+  assert.equal(await page.locator("#spellsGrid .spell-card").count(), 14);
+  await fill(page, "art_muto_score", 8);
+  await fill(page, "art_animal_score", 13);
+  await fill(page, "art_corpus_score", 6);
+  await fill(page, "char_sta_score", 2);
+  await fill(page, "spell_13_name", "The Beast Remade");
+  assert.equal(await value(page, "spell_13_level"), "25");
+  assert.equal(await value(page, "spell_13_requisites"), "肉身");
+  assert.equal(await value(page, "spell_13_bonus"), "+16");
+  await input(page, "xp_cumulative").check();
+  await fill(page, "spell_13_exp", 15);
+  assert.equal(await value(page, "spell_13_mastery"), "2");
+  assert.equal(await value(page, "spell_13_bonus"), "+18");
+  await fill(page, "spell_13_notes_1", "新增法术的备注");
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator("#btnExportJson").click();
+  const download = await downloadPromise;
+  const exported = JSON.parse(await fs.readFile(await download.path(), "utf8"));
+  assert.equal(exported.spell_13_notes_1, "新增法术的备注");
+  assert.equal(exported.spell_14_name, "");
+  await page.reload();
+  assert.equal(await page.locator("#spellsGrid .spell-card").count(), 14);
+  assert.equal(await value(page, "spell_13_notes_1"), "新增法术的备注");
+  assert.equal(await value(page, "spell_13_bonus"), "+18");
+  assert.equal(await input(page, "spell_13_bonus").isEditable(), false);
+  assert.equal(await page.locator("#spellReference13").isVisible(), true);
+  page.once("dialog", (dialog) => dialog.accept("第二个角色"));
+  await page.locator("#btnNewSlot").click();
+  assert.equal(await page.locator("#spellsGrid .spell-card").count(), 12);
+  await page.locator("#slotSelect").selectOption("default");
+  assert.equal(await page.locator("#spellsGrid .spell-card").count(), 14);
+  assert.equal(await value(page, "spell_13_name"), "The Beast Remade");
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.locator("#btnReset").click();
+  assert.equal(await page.locator("#spellsGrid .spell-card").count(), 12);
+  await page.locator("#inputImportJson").setInputFiles({ name: "扩展法术.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(exported)) });
+  await page.waitForFunction(() => document.querySelectorAll("#spellsGrid .spell-card").length === 14);
+  assert.equal(await value(page, "spell_13_notes_1"), "新增法术的备注");
+  assert.equal(await value(page, "spell_13_bonus"), "+18");
+  assert.equal(await value(page, "spell_14_name"), "");
+}));
+
+test("关闭自动计算后新增空白法术仍保存，手填加值可恢复", async () => withPage(async (page) => {
+  await page.locator("#btnToggleAutoCalc").click();
+  await page.locator("#btnAddSpell").click();
+  await page.reload();
+  assert.equal(await page.locator("#spellsGrid .spell-card").count(), 13);
+  assert.equal(await input(page, "spell_13_bonus").isEditable(), true);
+  await fill(page, "spell_13_bonus", "+27");
+  await fill(page, "spell_13_name", "The Beast Remade");
+  assert.equal(await value(page, "spell_13_level"), "25");
+  await page.reload();
+  assert.equal(await value(page, "spell_13_bonus"), "+27");
+  await page.locator("#btnToggleAutoCalc").click();
+  assert.equal(await input(page, "spell_13_bonus").isEditable(), false);
+  assert.equal(await value(page, "spell_13_bonus"), "+0");
+}));

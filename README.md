@@ -36,7 +36,9 @@
 
 沿用原有浏览器存档键和字段名，可直接载入旧角色及旧 JSON 文件。导入会创建独立角色，不覆盖当前角色。导出文件保留个人填写内容与自动填写来源标记。不同浏览器、不同网址或本地文件地址通常使用不同的存储空间，跨设备请导入导出。
 
-中文与双语均适配四页 A4。打印时选择 A4、默认缩放，并关闭浏览器页眉页脚。
+默认提供 12 个法术块，可通过第 4 页底部的“新增法术块”按钮继续添加；新增内容随当前角色保存，并支持 JSON 导入导出。
+
+默认角色卡的中文与双语均适配四页 A4，新增法术块会按需增加打印页。打印时选择 A4、默认缩放，并关闭浏览器页眉页脚。
 
 ## GitHub Pages 发布
 
@@ -47,3 +49,11 @@
 ## 署名与许可
 
 角色卡版式基于 Atlas Games 的定本四页人物卡。规则文本基于 *Ars Magica* 材料，©1993–2024 Trident, Inc. d/b/a Atlas Games，由 OriginalMadman 整理为开放许可 Markdown。本项目据本地中文译稿选录并结构化这些规则文本；其规则摘录与改编按 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 提供。Order of Hermes、Tremere、Doissetep 及 Grimgroth 为 Paradox Interactive AB 的商标。
+
+## TODO
+
+- [x] 移除“Ars Magica 魔法秘艺 五版 Definitive Edition 中文角色卡 已保存（11:57:02 PM）”开头
+- [x] 第一页右上角只用写出“魔法秘艺 5E Definitive Edition、 角色卡”
+- [x] 新增法术块的按钮，在第四页最下方
+- [x] 术语对照表不再给出出处栏
+- [ ] 根据更新的定本markdown检查有没有需要改掉的文本

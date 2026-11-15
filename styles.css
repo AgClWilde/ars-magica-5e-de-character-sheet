@@ -58,29 +58,6 @@ body {
   color: #f3ead8;
 }
 
-.toolbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.toolbar-brand h1 {
-  font-family: var(--font-title);
-  font-size: 18px;
-  color: var(--border-gold-bright);
-  letter-spacing: 0.5px;
-  font-weight: 700;
-}
-
-.toolbar-brand .badge {
-  font-size: 11px;
-  background: rgba(181, 141, 61, 0.2);
-  border: 1px solid var(--border-gold);
-  color: #ebd6a7;
-  padding: 2px 8px;
-  border-radius: 12px;
-}
-
 .toolbar-nav {
   display: flex;
   gap: 6px;
@@ -137,11 +114,6 @@ body {
 .btn-danger:hover {
   background: #7b1e1e;
   color: #fff;
-}
-
-.save-status {
-  font-size: 11px;
-  color: #bfb099;
 }
 
 /* 双语显示控制 */
@@ -451,30 +423,19 @@ input[readonly].calc-output {
   border-radius: 4px;
 }
 
-.ars-logo-en {
-  font-family: var(--font-title);
-  font-size: 34px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: #3d2c14;
-  text-shadow: 1px 1px 0 #f7e6b5, 2px 2px 4px rgba(0, 0, 0, 0.25);
-  line-height: 1.05;
-}
-
-.ars-logo-cn {
+.ars-logo-title {
   font-family: var(--font-title);
   font-size: 20px;
   font-weight: 700;
   color: var(--accent-crimson);
-  letter-spacing: 6px;
-  margin-top: 2px;
+  line-height: 1.4;
 }
 
 .ars-logo-sub {
-  font-size: 11.5px;
+  font-size: 15px;
   color: var(--ink-muted);
   letter-spacing: 2px;
-  margin-top: 2px;
+  margin-top: 6px;
 }
 
 .p1-subbar {
@@ -920,12 +881,17 @@ input[readonly].calc-output {
 }
 
 /* ==========================================================================
-   Page 4 专属布局 (12栏法术卡片网格对齐)
+   Page 4 专属布局 (法术卡片网格对齐)
    ========================================================================== */
 .spells-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px 18px;
+}
+
+.sheet-actions {
+  margin-top: 14px;
+  text-align: center;
 }
 
 .spell-card {
@@ -1133,8 +1099,8 @@ input[readonly].calc-output {
   .section-header-row { margin-bottom: 4px; padding-bottom: 2px; }
   .sheet-footer { font-size: 8px; margin-top: 5px; }
   .page-badge { font-size: 8px; top: 1px; right: 10px; z-index: 5; padding: 0 4px; }
-  .ars-logo-en { font-size: 29px; }
-  .ars-logo-cn { font-size: 17px; }
+  .ars-logo-title { font-size: 17px; }
+  .ars-logo-sub { font-size: 12px; }
   .ars-logo-banner { padding: 5px; }
 
   input[type="text"], input[type="number"], select, textarea {
@@ -1201,7 +1167,7 @@ input[readonly].calc-output {
     font-size: 10.5px;
   }
   .spell-card .field-label { font-size: 10px; line-height: 10px; }
-  #page-4 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  #page-4 { padding-top: 8px !important; padding-bottom: 8px !important; break-inside: auto; }
   .spell-row-2col, .spell-row-3col { gap: 4px; }
   .spell-row-3col .field-row { display: block; }
   .spell-row-3col .field-label { display: block; line-height: 10px; }
@@ -1237,7 +1203,6 @@ input[readonly].calc-output {
     grid-template-columns: 1fr;
   }
   .app-toolbar { position: static; padding: 10px; }
-  .toolbar-brand { flex-wrap: wrap; }
   .toolbar-actions, .toolbar-nav { gap: 5px; }
   .sheets-container { padding: 0 8px; margin-top: 12px; gap: 18px; }
   .sheet-page { padding: 20px 14px 16px; }
