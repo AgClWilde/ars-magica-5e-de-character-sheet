@@ -3,21 +3,21 @@
    ========================================================================== */
 
 :root {
-  --parchment-bg: #f3ead8;
-  --parchment-light: #faf5ea;
-  --parchment-dark: #e2d2b5;
-  --border-gold: #b58d3d;
-  --border-gold-bright: #d4af37;
-  --border-gold-dark: #7a5a1e;
-  --ink-black: #1e1812;
-  --ink-brown: #3c2f23;
-  --ink-muted: #6b5844;
-  --accent-crimson: #7b1e1e;
-  --input-bg: rgba(255, 252, 245, 0.55);
-  --input-focus-bg: rgba(255, 248, 225, 0.92);
-  --shadow-card: 0 10px 32px rgba(30, 20, 10, 0.35);
-  --font-title: "Cinzel Decorative", "Cinzel", "Noto Serif SC", "Songti SC", "STSong", serif;
+  --canvas: #efeee9;
+  --paper: #fffdf8;
+  --surface: #f6f4ef;
+  --rule: #d8d3ca;
+  --rule-strong: #8d867a;
+  --ink-black: #282620;
+  --ink-brown: #454139;
+  --ink-muted: #6c665c;
+  --accent-crimson: #7b303a;
+  --accent-soft: #f5e9e9;
+  --input-bg: #fcfaf6;
+  --input-focus-bg: #ffffff;
+  --font-title: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "Georgia", serif;
   --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "Georgia", serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 }
 
@@ -28,9 +28,7 @@
 }
 
 body {
-  background-color: #26201b;
-  background-image:
-    radial-gradient(circle at 50% 20%, #3a3026 0%, #1b1612 100%);
+  background: var(--canvas);
   color: var(--ink-black);
   font-family: var(--font-serif);
   font-size: 13px;
@@ -46,16 +44,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(180deg, #2d231a 0%, #1f1812 100%);
-  border-bottom: 2px solid var(--border-gold);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
   padding: 10px 20px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  color: #f3ead8;
+  color: var(--ink-black);
 }
 
 .toolbar-nav {
@@ -72,15 +69,15 @@ body {
 }
 
 .btn {
-  background: linear-gradient(180deg, #473828 0%, #2e2419 100%);
-  color: #f4ebd9;
-  border: 1px solid var(--border-gold);
+  background: var(--paper);
+  color: var(--ink-brown);
+  border: 1px solid var(--rule);
   border-radius: 4px;
   padding: 5px 11px;
-  font-family: var(--font-serif);
+  font-family: var(--font-ui);
   font-size: 12px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -88,31 +85,29 @@ body {
 }
 
 .btn:hover {
-  background: linear-gradient(180deg, #5c4833 0%, #3d3022 100%);
-  border-color: var(--border-gold-bright);
-  color: #fff;
+  background: var(--surface);
+  border-color: var(--rule-strong);
+  color: var(--ink-black);
 }
 
-.btn.active,
-.btn-primary {
-  background: linear-gradient(180deg, #b58d3d 0%, #876423 100%);
-  color: #1a130c;
+.btn.active {
+  background: var(--accent-soft);
+  color: var(--accent-crimson);
   font-weight: 700;
-  border-color: #e6c670;
+  border-color: #c7a9ab;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(180deg, #c9a04dc4 0%, #9c752b 100%);
-  color: #fff;
+.btn-primary {
+  border-color: var(--rule-strong);
+  font-weight: 700;
 }
 
 .btn-danger {
-  border-color: #9e3a3a;
-  color: #f3b8b8;
+  color: var(--accent-crimson);
 }
 
 .btn-danger:hover {
-  background: #7b1e1e;
+  background: var(--accent-crimson);
   color: #fff;
 }
 
@@ -131,7 +126,7 @@ body.mode-cn-only .en-sub {
 }
 
 /* ==========================================================================
-   页面容器与羊皮纸边框设计 (4页 A4 比例)
+   四页人物卡容器
    ========================================================================== */
 .sheets-container {
   max-width: 980px;
@@ -144,25 +139,11 @@ body.mode-cn-only .en-sub {
 
 .sheet-page {
   position: relative;
-  background-color: var(--parchment-bg);
-  background-image:
-    radial-gradient(ellipse at center, rgba(255, 251, 240, 0.7) 0%, rgba(226, 210, 181, 0.4) 70%, rgba(196, 173, 134, 0.65) 100%),
-    repeating-linear-gradient(0deg, rgba(120, 90, 40, 0.015) 0px, rgba(120, 90, 40, 0.015) 2px, transparent 2px, transparent 4px);
-  border: 3px solid var(--border-gold-dark);
+  background: var(--paper);
+  border: 1px solid var(--rule);
   border-radius: 4px;
-  box-shadow: var(--shadow-card);
   padding: 26px 30px 24px;
   overflow: hidden;
-}
-
-/* 复古金边内框 */
-.sheet-page::before {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border: 1.5px solid var(--border-gold);
-  pointer-events: none;
-  z-index: 1;
 }
 
 .page-badge {
@@ -173,39 +154,26 @@ body.mode-cn-only .en-sub {
   color: var(--ink-muted);
   font-family: var(--font-title);
   z-index: 2;
-  background: rgba(243, 234, 216, 0.9);
+  background: var(--paper);
   padding: 1px 8px;
-  border: 1px solid var(--border-gold);
-  border-radius: 2px;
 }
 
 /* ==========================================================================
-   通用区块面板 (Golden Framed Box)
+   内容分区与标题
    ========================================================================== */
 .panel-box {
   position: relative;
-  background: var(--parchment-light);
-  border: 2px solid var(--border-gold);
-  box-shadow: inset 0 0 12px rgba(181, 141, 61, 0.12), 0 2px 5px rgba(0, 0, 0, 0.08);
+  background: transparent;
+  border: 1px solid var(--rule);
   padding: 12px 16px;
   margin-bottom: 14px;
   z-index: 2;
 }
 
-/* 面板四角金钻装饰 */
+/* 装饰节点不占用人物卡的阅读空间。 */
 .panel-box .corner-diamond {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  background: linear-gradient(135deg, #f5df98 0%, #b58d3d 55%, #6e4f16 100%);
-  border: 1px solid #4e360c;
-  transform: rotate(45deg);
-  z-index: 3;
+  display: none;
 }
-.panel-box .corner-diamond.tl { top: -5px; left: -5px; }
-.panel-box .corner-diamond.tr { top: -5px; right: -5px; }
-.panel-box .corner-diamond.bl { bottom: -5px; left: -5px; }
-.panel-box .corner-diamond.br { bottom: -5px; right: -5px; }
 
 /* 标题样式 */
 .section-title {
@@ -218,7 +186,7 @@ body.mode-cn-only .en-sub {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  border-bottom: 1px solid rgba(181, 141, 61, 0.45);
+  border-bottom: 1px solid var(--rule);
   padding-bottom: 2px;
   line-height: 1.25;
 }
@@ -227,7 +195,7 @@ body.mode-cn-only .en-sub {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(181, 141, 61, 0.45);
+  border-bottom: 1px solid var(--rule);
   padding-bottom: 3px;
   margin-bottom: 6px;
 }
@@ -244,7 +212,7 @@ textarea {
   color: var(--ink-black);
   background: var(--input-bg);
   border: none;
-  border-bottom: 1px solid #574634;
+  border-bottom: 1px solid var(--rule-strong);
   padding: 1px 5px;
   height: 22px;
   line-height: 20px;
@@ -275,11 +243,15 @@ textarea:focus {
   box-shadow: 0 1px 0 0 var(--accent-crimson);
 }
 
-input[readonly].calc-output {
-  background: rgba(181, 141, 61, 0.14);
+input.calc-output,
+.char-table input[data-field$="_score"],
+#abilitiesBody input[data-field$="_score"],
+.art-table input[data-field$="_score"] {
+  background: var(--accent-soft);
   font-weight: 700;
-  color: #5a1818;
-  border-bottom: 1px dashed var(--border-gold-dark);
+  color: var(--accent-crimson);
+  border-bottom: 1px solid #9e6971;
+  font-variant-numeric: tabular-nums;
 }
 
 /* 经验与伤势小方框 */
@@ -287,8 +259,9 @@ input[readonly].calc-output {
   width: 24px !important;
   height: 19px !important;
   line-height: 17px !important;
-  border: 1px solid #4a3c2c !important;
-  background: #fffdf9 !important;
+  border: 1px solid var(--rule-strong) !important;
+  background: var(--paper) !important;
+  color: var(--ink-muted);
   text-align: center;
   font-size: 11px !important;
   padding: 0 !important;
@@ -302,8 +275,8 @@ input[readonly].calc-output {
   -webkit-appearance: none;
   width: 15px;
   height: 15px;
-  border: 1.5px solid #2b2118;
-  background: #fffdf8;
+  border: 1.5px solid var(--rule-strong);
+  background: var(--paper);
   cursor: pointer;
   display: inline-grid;
   place-content: center;
@@ -313,7 +286,7 @@ input[readonly].calc-output {
 
 .check-sq:checked {
   background: var(--accent-crimson);
-  border-color: #4a0e0e;
+  border-color: var(--accent-crimson);
 }
 
 .check-sq:checked::after {
@@ -322,6 +295,13 @@ input[readonly].calc-output {
   font-size: 11px;
   font-weight: bold;
   line-height: 1;
+}
+
+.fatigue-table tbody tr:has(.check-sq:checked),
+.wounds-table tbody tr:has(.check-sq:checked) {
+  background: var(--accent-soft);
+  color: var(--accent-crimson);
+  font-weight: 700;
 }
 
 /* 字段行布局：垂直居中对齐，确保标签与输入下划线整齐划一 */
@@ -418,16 +398,14 @@ input[readonly].calc-output {
   align-items: center;
   text-align: center;
   padding: 10px 12px;
-  border: 2px double var(--border-gold-dark);
-  background: linear-gradient(135deg, rgba(181, 141, 61, 0.14) 0%, rgba(255, 250, 235, 0.45) 50%, rgba(181, 141, 61, 0.18) 100%);
-  border-radius: 4px;
+  border-left: 1px solid var(--rule);
 }
 
 .ars-logo-title {
   font-family: var(--font-title);
   font-size: 20px;
   font-weight: 700;
-  color: var(--accent-crimson);
+  color: var(--ink-black);
   line-height: 1.4;
 }
 
@@ -505,7 +483,7 @@ input[readonly].calc-output {
   font-weight: 700;
   padding-bottom: 4px;
   text-align: center;
-  border-bottom: 1px solid rgba(181, 141, 61, 0.3);
+  border-bottom: 1px solid var(--rule);
 }
 
 .char-table td {
@@ -578,7 +556,7 @@ input[readonly].calc-output {
   flex-direction: column;
   justify-content: space-between;
   gap: 8px;
-  border-left: 1px dashed rgba(181, 141, 61, 0.5);
+  border-left: 1px dashed var(--rule);
   padding-left: 14px;
 }
 
@@ -624,7 +602,7 @@ input[readonly].calc-output {
   font-weight: 700;
   padding-bottom: 4px;
   text-align: center;
-  border-bottom: 1px solid rgba(181, 141, 61, 0.35);
+  border-bottom: 1px solid var(--rule);
 }
 
 .fatigue-table td {
@@ -747,7 +725,7 @@ input[readonly].calc-output {
   color: var(--ink-muted);
   padding-bottom: 4px;
   text-align: center;
-  border-bottom: 1px solid rgba(181, 141, 61, 0.35);
+  border-bottom: 1px solid var(--rule);
 }
 
 .art-table td {
@@ -780,8 +758,8 @@ input[readonly].calc-output {
 
 .casting-formulas-note {
   font-size: 11.5px;
-  background: rgba(181, 141, 61, 0.1);
-  border-left: 3px solid var(--border-gold);
+  background: var(--surface);
+  border-left: 3px solid var(--rule);
   padding: 6px 8px;
   margin-bottom: 8px;
   line-height: 1.45;
@@ -895,8 +873,8 @@ input[readonly].calc-output {
 }
 
 .spell-card {
-  border: 1px solid rgba(181, 141, 61, 0.55);
-  background: rgba(255, 253, 248, 0.65);
+  border: 1px solid var(--rule);
+  background: var(--paper);
   padding: 7px 10px;
   border-radius: 2px;
 }
@@ -942,7 +920,7 @@ input[readonly].calc-output {
 .drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(40, 38, 32, 0.35);
   z-index: 2000;
   display: none;
   justify-content: flex-end;
@@ -954,23 +932,22 @@ input[readonly].calc-output {
 
 .drawer-panel {
   width: min(720px, 95vw);
-  background: var(--parchment-light);
+  background: var(--paper);
   color: var(--ink-black);
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-left: 3px solid var(--border-gold);
-  box-shadow: -8px 0 28px rgba(0, 0, 0, 0.5);
+  border-left: 1px solid var(--rule);
 }
 
 .drawer-header {
   padding: 14px 18px;
-  background: #2b2118;
-  color: #f4ebd9;
+  background: var(--paper);
+  color: var(--ink-black);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--border-gold);
+  border-bottom: 1px solid var(--rule);
 }
 
 .drawer-body {
@@ -990,7 +967,7 @@ input[readonly].calc-output {
   flex: 1;
   min-width: 180px;
   background: #fff;
-  border: 1px solid var(--border-gold);
+  border: 1px solid var(--rule);
   padding: 6px 10px;
   height: 32px;
   border-radius: 4px;
@@ -999,7 +976,7 @@ input[readonly].calc-output {
 .glossary-controls select {
   width: auto;
   background: #fff;
-  border: 1px solid var(--border-gold);
+  border: 1px solid var(--rule);
   padding: 4px 10px;
   height: 32px;
   border-radius: 4px;
@@ -1013,13 +990,13 @@ input[readonly].calc-output {
 
 .glossary-result-table th,
 .glossary-result-table td {
-  border-bottom: 1px solid rgba(181, 141, 61, 0.35);
+  border-bottom: 1px solid var(--rule);
   padding: 6px 8px;
   text-align: left;
 }
 
 .glossary-result-table th {
-  background: rgba(181, 141, 61, 0.18);
+  background: var(--surface);
   color: var(--ink-brown);
 }
 
@@ -1034,14 +1011,34 @@ input[readonly].calc-output {
 
 .matrix-table th,
 .matrix-table td {
-  border: 1px solid rgba(181, 141, 61, 0.45);
+  border: 1px solid var(--rule);
   padding: 4px 3px;
 }
 
 .matrix-table th {
-  background: rgba(181, 141, 61, 0.2);
+  background: var(--surface);
   color: var(--ink-brown);
 }
+
+/* 屏幕上的规则辅助信息不改变纸卡字段。 */
+.rules-controls { background: var(--paper); border: 1px solid var(--rule); padding: 12px 16px; border-radius: 4px; }
+.rules-controls summary { cursor: pointer; font-weight: bold; }
+.rules-controls p { margin-top: 8px; font-size: 12px; line-height: 1.6; }
+.rules-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; margin-top: 12px; }
+.rules-grid label { display: flex; flex-direction: column; gap: 4px; }
+.rules-grid input { width: 100%; }
+.rules-grid output { padding: 4px; min-height: 24px; }
+.check-option, .ritual-label, .carried-label { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; font-size: 11px; }
+.check-option { margin-top: 8px; }
+input[type="checkbox"] { flex: none; }
+.spell-reference { font-size: 11px; margin-top: 4px; }
+.spell-reference summary { cursor: pointer; color: var(--ink-muted); }
+.spell-reference div { white-space: pre-wrap; line-height: 1.6; padding: 5px; }
+.spell-reference[hidden] { display: none; }
+.glossary-result-table td { overflow-wrap: anywhere; }
+.glossary-result-table td:last-child { min-width: 120px; }
+#glossaryCount { font-size: 12px; color: var(--ink-muted); margin-bottom: 6px; }
+
 
 /* ==========================================================================
    打印与导出 PDF 专属样式 (@media print)
@@ -1081,7 +1078,7 @@ input[readonly].calc-output {
     page-break-after: always;
     break-after: page;
     break-inside: avoid;
-    border-width: 2px;
+    border-width: 1px;
   }
 
   .sheet-page:last-child {
@@ -1186,7 +1183,193 @@ input[readonly].calc-output {
   overscroll-behavior-inline: contain;
 }
 
-@media screen and (max-width: 768px) {
+/* 屏幕阅读尺寸独立于 A4 打印尺寸。 */
+@media screen {
+  html { scroll-padding-top: 150px; }
+
+  body {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .app-toolbar {
+    padding: 10px max(20px, calc((100vw - 1168px) / 2));
+    gap: 8px;
+  }
+
+  .toolbar-nav {
+    width: 100%;
+    gap: 4px;
+    padding-bottom: 8px;
+    padding-right: 110px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .toolbar-nav .btn {
+    border-color: transparent;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .toolbar-nav .btn:hover,
+  .toolbar-nav .btn:focus-visible {
+    background: var(--accent-soft);
+    color: var(--accent-crimson);
+  }
+
+  .toolbar-actions { width: 100%; gap: 6px; }
+  #btnOpenGlossary { position: absolute; top: 10px; right: max(20px, calc((100vw - 1168px) / 2)); }
+  #btnExportJson { margin-left: auto; }
+  .btn { min-height: 32px; padding: 5px 10px; line-height: 1.4; }
+  #slotSelect { width: auto; max-width: 180px; height: 32px; }
+
+  .sheets-container { max-width: 1200px; gap: 24px; }
+  .sheet-page { padding: 32px; scroll-margin-top: 18px; }
+  .panel-box { padding: 16px 18px; margin-bottom: 18px; }
+  .page-badge { top: 10px; right: 24px; font-family: var(--font-ui); }
+  .section-title { font-size: 19px; color: var(--ink-black); margin-bottom: 10px; padding-bottom: 6px; letter-spacing: 0; }
+  .section-header-row { flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .ars-logo-title { font-size: 23px; }
+  .ars-logo-sub { font-size: 14px; letter-spacing: 1px; }
+
+  input[type="text"], input[type="number"], select, textarea {
+    min-width: 0;
+    height: 28px;
+    line-height: 24px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    border-radius: 2px 2px 0 0;
+  }
+
+  input[type="number"] { font-family: var(--font-mono); }
+  input::placeholder { color: var(--ink-muted); opacity: 1; font-weight: 400; }
+  .field-row { min-width: 0; min-height: 28px; margin-bottom: 6px; }
+  .field-label, .field-label-lg { font-size: 13px; line-height: 1.45; font-weight: 500; }
+  .field-label-lg { font-size: 15px; font-weight: 600; }
+  .en-sub { white-space: normal; }
+  .field-label:has(> .en-sub), .field-label-lg:has(> .en-sub),
+  .field-label > strong:has(> .en-sub) {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    align-items: baseline;
+  }
+  .field-label .en-sub, .field-label-lg .en-sub {
+    display: block;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    margin-left: 0;
+    line-height: 1.25;
+  }
+  .char-name .en-sub { display: block; margin-left: 0; }
+
+  .p1-header-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; }
+  .p1-subbar { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.05fr) minmax(0, .85fr) minmax(0, 1.15fr); }
+  .p1-bio-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.75fr); }
+  .p1-main-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 24px; }
+  .p2-top-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr); }
+  .p2-combat-grid { grid-template-columns: minmax(0, 1fr) 136px; }
+  .p2-fatigue-wounds-grid { grid-template-columns: minmax(0, .92fr) minmax(0, 1.38fr); }
+  .p3-hermetic-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); }
+  .p3-casting-lab-grid { grid-template-columns: minmax(0, 1.06fr) minmax(0, 1fr); gap: 24px; }
+  .p3-familiar-grid { grid-template-columns: minmax(0, .9fr) minmax(0, .9fr) minmax(0, 1.6fr); }
+  .arts-three-col, .cords-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bio-two-col, .equipment-grid, .spells-grid, .spell-row-2col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spell-row-3col { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr); }
+  .p1-main-grid > *, .p2-top-grid > *, .p2-fatigue-wounds-grid > *,
+  .p3-casting-lab-grid > *, .p3-familiar-grid > *, .spells-grid > * { min-width: 0; }
+
+  .bio-details-col .field-label, .p3-hermetic-top .field-label { color: var(--ink-muted); }
+  .bio-details-col > .field-row .field-label { min-width: 68px; }
+  .bio-two-col .field-row { flex-wrap: wrap; }
+  .bio-two-col .field-row > input { flex-basis: 50px; }
+  input[data-field="character_name"] { font-size: 20px; font-weight: 650; height: 36px; }
+
+  .char-table th, .ability-table th, .art-table th, .vis-table th,
+  .fatigue-table th, .wounds-table th, .weapons-table th { font-size: 12px; font-weight: 500; padding-bottom: 7px; }
+  .char-table td, .ability-table td, .art-table td, .vis-table td { height: 32px; padding: 2px 3px; }
+  .char-table tbody tr + tr, .ability-table tbody tr + tr, .art-table tbody tr + tr { border-top: 1px solid var(--surface); }
+  .char-table input[data-field$="_score"], #abilitiesBody input[data-field$="_score"],
+  .art-table input[data-field$="_score"] { font-size: 17px; }
+  .exp-box { width: 26px !important; height: 22px !important; line-height: 20px !important; font-size: 12px !important; }
+  .lined-list { gap: 6px; }
+
+  input.calc-output { text-align: center; font-size: 16px; }
+  .soak-box .big-score { height: 32px; font-size: 20px; }
+  .fatigue-table td, .wounds-table td { height: 34px; }
+  .check-sq { width: 18px; height: 18px; border-radius: 2px; }
+  .check-sq:checked::after { font-size: 13px; }
+  .fw-col { overflow-x: auto; }
+  .wounds-table { min-width: 440px; }
+  .weapons-table { min-width: 960px; }
+  .weapons-table td { padding: 6px 3px; }
+  .weapons-table input[data-field$="_name"] { font-weight: 600; }
+  .weapons-table input[data-field$="_ability"] { font-size: 12px; color: var(--ink-muted); }
+  .formula-group input { height: 27px; font-size: 12px; }
+  .formula-group input.calc-output { font-size: 15px; }
+  .formula-header span { color: var(--ink-muted); font-weight: 400; }
+  .formula-header span.res { font-weight: 700; color: var(--accent-crimson); }
+  .calc-block-header { font-size: 14px; }
+  .calc-blocks-stack { gap: 12px; }
+  .calc-equation .eq-op { height: 28px; }
+  .calc-equation .eq-col span { font-size: 12px; text-align: center; }
+  .calc-subnote { font-size: 12px; }
+  .casting-formulas-note { font-size: 12px; line-height: 1.65; color: var(--ink-muted); border-left-width: 2px; }
+  .section-title:has(.check-option) { flex-wrap: wrap; }
+  .check-option { white-space: normal; }
+
+  .spells-grid { gap: 16px; }
+  .spell-card { padding: 14px; border-radius: 4px; }
+  .spell-card .field-row { min-height: 28px; margin-bottom: 5px; }
+  .spell-card input[type="text"], .spell-card input[type="number"] { height: 28px; line-height: 24px; font-size: 14px; }
+  .spell-card input[data-field$="_name"] { font-weight: 650; font-size: 16px; }
+  .spell-card input.calc-output { font-size: 17px; }
+  .spell-row-3col .field-row { flex-direction: column; align-items: stretch; gap: 2px; }
+  .spell-row-3col .field-row > input { flex: auto; }
+  .spell-card input[data-field$="_exp"], .spell-reference { color: var(--ink-muted); font-size: 12px; }
+  .spell-reference summary { padding-block: 4px; }
+  .sheet-footer { font-family: var(--font-ui); font-style: normal; font-size: 11px; margin-top: 12px; }
+
+  .rules-controls { padding: 14px 18px; }
+  .rules-controls summary { font-size: 14px; }
+  .rules-controls p { font-size: 13px; color: var(--ink-muted); }
+  #ruleSummary { padding: 10px 12px; background: var(--accent-soft); border-left: 3px solid var(--accent-crimson); color: var(--accent-crimson); font-weight: 600; }
+  #resistanceResult { font-family: var(--font-mono); font-size: 18px; color: var(--accent-crimson); font-weight: 700; }
+  .rules-controls .btn { margin-top: 8px; }
+  #houseDefaultsStatus { font-size: 12px; color: var(--ink-muted); }
+
+  .drawer-panel { width: min(780px, 95vw); }
+  .drawer-header { gap: 12px; }
+  .drawer-header h2 { font-family: var(--font-title); font-size: 21px; }
+  .glossary-controls input, .glossary-controls select { height: 36px; }
+  .glossary-result-table { font-size: 14px; }
+  .glossary-result-table td { padding-block: 10px; }
+  #castingMatrixWrap { overflow-x: auto; }
+  .matrix-table { min-width: 640px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .matrix-table td { padding: 7px 4px; }
+  .matrix-table tbody tr:hover { background: var(--surface); }
+
+  input[type="text"]:focus-visible,
+  input[type="number"]:focus-visible,
+  :is(input, select, textarea, button, a, summary):focus-visible {
+    outline: 2px solid var(--accent-crimson);
+    outline-offset: 2px;
+  }
+
+  input[type="text"]:focus, input[type="number"]:focus { box-shadow: none; }
+  input[data-field], summary { scroll-margin-block: 18px; }
+}
+
+@media screen and (min-width: 901px) and (max-width: 1199px) {
+  html { scroll-padding-top: 190px; }
+  .sheet-page { padding: 30px 22px; }
+  .p1-bio-grid { gap: 12px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.9fr); }
+  .bio-details-col .bio-two-col { grid-template-columns: 1fr; gap: 0; }
+}
+
+@media screen and (max-width: 900px) {
+  html { scroll-padding-top: 0; }
   .p1-header-grid,
   .p1-subbar,
   .p1-bio-grid,
@@ -1202,10 +1385,12 @@ input[readonly].calc-output {
   .equipment-grid {
     grid-template-columns: 1fr;
   }
-  .app-toolbar { position: static; padding: 10px; }
+  .rules-grid { grid-template-columns: 1fr; }
+  .app-toolbar { position: relative; padding: 10px; }
+  #btnOpenGlossary { right: 10px; }
   .toolbar-actions, .toolbar-nav { gap: 5px; }
   .sheets-container { padding: 0 8px; margin-top: 12px; gap: 18px; }
-  .sheet-page { padding: 20px 14px 16px; }
+  .sheet-page { padding: 30px 14px 16px; }
   .panel-box { padding: 10px; }
   .p1-main-grid > *, .p2-top-grid > *, .p3-casting-lab-grid > *,
   .p3-familiar-grid > *, .spells-grid > * { min-width: 0; }
@@ -1223,6 +1408,12 @@ input[readonly].calc-output {
     line-height: 18px;
   }
   .spell-card .en-sub { white-space: normal; }
+  .ars-logo-banner { border-left: 0; border-top: 1px solid var(--rule); padding-top: 16px; }
+  .section-title { flex-wrap: wrap; }
+  .check-option { align-items: flex-start; }
+  .glossary-controls input { min-width: 0; flex-basis: 100%; }
+  .drawer-body { padding: 14px 10px; }
+  .glossary-result-table th:first-child { width: 72px !important; }
   .glossary-controls { flex-wrap: wrap; }
   .glossary-result-table { table-layout: fixed; }
   .glossary-result-table td { overflow-wrap: anywhere; }
@@ -1231,7 +1422,7 @@ input[readonly].calc-output {
   }
   .soak-box {
     border-left: none;
-    border-top: 1px dashed rgba(181, 141, 61, 0.5);
+    border-top: 1px dashed var(--rule);
     padding-left: 0;
     padding-top: 8px;
     flex-direction: row;
@@ -1239,22 +1430,27 @@ input[readonly].calc-output {
   }
 }
 
-/* 屏幕上的规则辅助信息不改变纸卡字段。 */
-.rules-controls { background: var(--parchment-light); border: 1px solid var(--border-gold); padding: 12px 16px; border-radius: 4px; }
-.rules-controls summary { cursor: pointer; font-weight: bold; }
-.rules-controls p { margin-top: 8px; font-size: 12px; line-height: 1.6; }
-.rules-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; margin-top: 12px; }
-.rules-grid label { display: flex; flex-direction: column; gap: 4px; }
-.rules-grid input { width: 100%; }
-.rules-grid output { padding: 4px; min-height: 24px; }
-.check-option, .ritual-label, .carried-label { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; font-size: 11px; }
-.check-option { margin-top: 8px; }
-input[type="checkbox"] { flex: none; }
-.spell-reference { font-size: 11px; margin-top: 4px; }
-.spell-reference summary { cursor: pointer; color: var(--ink-muted); }
-.spell-reference div { white-space: pre-wrap; line-height: 1.6; padding: 5px; }
-.spell-reference[hidden] { display: none; }
-.glossary-result-table td { overflow-wrap: anywhere; }
-.glossary-result-table td:last-child { min-width: 120px; }
-#glossaryCount { font-size: 12px; color: var(--ink-muted); margin-bottom: 6px; }
-@media screen and (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
+@media screen and (max-width: 480px) {
+  .toolbar-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toolbar-nav .btn { font-size: 12px; padding-inline: 4px; }
+  .btn { min-height: 36px; }
+  #slotSelect { height: 36px; max-width: 160px; }
+  .panel-box { padding: 12px 8px; }
+  .sheet-page { padding-inline: 10px; }
+  .spell-card { padding: 10px 8px; }
+  .field-label, .field-label-lg { white-space: normal; }
+  .char-table { table-layout: fixed; }
+  .char-name { width: 27%; white-space: normal; }
+  .char-abbr { width: 13%; }
+  .p1-header-fields .bio-two-col { grid-template-columns: 1fr; }
+  .calc-equation { gap: 3px; }
+  .calc-equation .eq-op-wide { padding-inline: 2px; }
+  .calc-equation .eq-col span { overflow-wrap: anywhere; }
+  .calc-block-header { flex-wrap: wrap; gap: 2px 8px; }
+  .drawer-header { padding: 12px; }
+  .drawer-header h2 { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, input, select, textarea { transition: none; }
+}
