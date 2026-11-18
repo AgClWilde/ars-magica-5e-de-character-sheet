@@ -10,7 +10,7 @@ from pathlib import Path
 PROJECT = Path(__file__).resolve().parents[1]
 LIBRARY = PROJECT.parent
 EN_PATH = Path("Organized/5e/Definitive Edition/Core Rules/Ars Magica - Definitive Edition [Open License - Reviewed].md")
-ZH_PATH = Path("翻译/5E/Definitive Edition/Core Rules/Ars Magica - Definitive Edition [Open License - Reviewed].md")
+ZH_PATH = Path("翻译/5E/Definitive Edition/Core Rules/魔法秘艺 - 定本核心规则.md")
 
 
 def plain(value):
